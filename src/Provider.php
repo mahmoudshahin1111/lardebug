@@ -32,6 +32,10 @@ class Provider extends ServiceProvider
      */
     public function boot()
     {
+        $this->registerMiddleware();
+        $this->registerCommands();
+        $this->registerPublishConfigCommand();
+
         $host = config('lardebug.server.host');
         $port = config('lardebug.server.port');
 
@@ -43,9 +47,13 @@ class Provider extends ServiceProvider
         $this->app->singleton('lardebug.commands.serve', function ($app) use ($larDebug, $host, $port) {
             return new StartDebugServer(__DIR__, $host, $port);
         });
-        $this->registerMiddleware();
-        $this->registerCommands();
-
+   
+    }
+    private function registerPublishConfigCommand(){
+        // dd(__DIR__.'/config/lardebug.php');
+        $this->publishes([
+            __DIR__.'/config/lardebug.php'=>\config_path('/lardebug.php')
+        ],'lardebug-configs');
     }
     private function getCollectors()
     {
