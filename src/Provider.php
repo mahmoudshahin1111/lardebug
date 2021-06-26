@@ -34,10 +34,10 @@ class Provider extends ServiceProvider
     {
         
         $collectors = [];
-        $collectors = array_merge($collectors,['route'=>new \Lib\Collectors\RouteCollector($this->app->make(Router::class))]);
-        $collectors = array_merge($collectors,['request'=>new \Lib\Collectors\RequestCollector($this->app->make(Request::class))]);
-        $collectors = array_merge($collectors,['query'=>new \Lib\Collectors\QueryCollector($this->app->make('db'))]);
-        $collectors = array_merge($collectors,['message'=>new \Lib\Collectors\MessageCollector()]);
+        $collectors = array_merge($collectors,['route'=>new \LarDebug\Collectors\RouteCollector($this->app->make(Router::class))]);
+        $collectors = array_merge($collectors,['request'=>new \LarDebug\Collectors\RequestCollector($this->app->make(Request::class))]);
+        $collectors = array_merge($collectors,['query'=>new \LarDebug\Collectors\QueryCollector($this->app->make('db'))]);
+        $collectors = array_merge($collectors,['message'=>new \LarDebug\Collectors\MessageCollector()]);
 
         $server = new Server(config('lardebug.server.host'),config('lardebug.server.port'));
 
@@ -45,7 +45,7 @@ class Provider extends ServiceProvider
         $this->app->singleton('larDebug',function($app)use($larDebug){
             return $larDebug;
         });
-        $this->app->make(\Illuminate\Contracts\Http\Kernel::class)->pushMiddleware(\Lib\Middleware::class);
+        $this->app->make(\Illuminate\Contracts\Http\Kernel::class)->pushMiddleware(\LarDebug\Middleware::class);
     }
     
 }
