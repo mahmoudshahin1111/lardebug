@@ -4,7 +4,6 @@
     "description": "",
     "keywords": ["lardebug", "laravel debugger"],
     "license": "MIT",
-    "version": "0.1.0",
     "authors": [
         {
             "name": "Mahmoud Shahin",
@@ -24,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "LarDebug\\": "src/"
+            "LarDebug": "src"
         }
     },
     "scripts": {
