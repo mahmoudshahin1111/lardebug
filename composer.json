@@ -1,0 +1,32 @@
+{
+    "name": "mahmoudshahin/lardebug",
+    "type": "library",
+    "description": "",
+    "keywords": ["lardebug", "laravel debugger"],
+    "license": "MIT",
+    "version": "0.1.0",
+    "authors": [
+        {
+            "name": "Mahmoud Shahin",
+            "email": "mahmoudshahin1111@gmail.com"
+
+        }
+    ],
+    "require": {
+        "php": "^7.2|^8.0"
+    },
+    "require-dev": {
+        "guzzlehttp/guzzle": "^7.0.1",
+        "mockery/mockery": "^1.4.2",
+        "nunomaduro/collision": "^5.0",
+        "phpunit/phpunit": "^9.3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "LarDebug\\": "src/"
+        }
+    },
+    "scripts": {
+     
+    }
+}
