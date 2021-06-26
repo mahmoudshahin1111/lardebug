@@ -1,13 +1,13 @@
 {
-  "name": "laravelanalysis",
-  "version": "1.0.0",
+  "name": "lardebug",
+  "version": "0.1.0",
   "description": "",
   "main": "/",
   "scripts": {
     "serve": "concurrently  \"tsc --watch\" \"nodemon src/dir/index.js\""
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
     "socket.io": "^4.1.2"

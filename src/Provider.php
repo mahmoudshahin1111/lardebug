@@ -2,17 +2,17 @@
 
 namespace LarDebug;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Routing\Router;
-use Illuminate\Routing\Route;
-use Illuminate\Support\Facades\Http;
-use  Illuminate\Foundation\Application as App;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Application as App;
 use Illuminate\Http\Request;
-use Lib\Collectors\MessageCollector;
-use Lib\Collectors\QueryCollector;
-use Lib\Collectors\RequestCollector;
-use Lib\Collectors\RouteCollector;
+use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\ServiceProvider;
+use LarDebug\Collectors\MessageCollector;
+use LarDebug\Collectors\QueryCollector;
+use LarDebug\Collectors\RequestCollector;
+use LarDebug\Collectors\RouteCollector;
+use LarDebug\Command\StartDebugServer;
+
 class Provider extends ServiceProvider
 {
     /**
@@ -22,7 +22,7 @@ class Provider extends ServiceProvider
      */
     public function register()
     {
-        
+
     }
 
     /**
@@ -32,20 +32,38 @@ class Provider extends ServiceProvider
      */
     public function boot()
     {
-        
-        $collectors = [];
-        $collectors = array_merge($collectors,['route'=>new \LarDebug\Collectors\RouteCollector($this->app->make(Router::class))]);
-        $collectors = array_merge($collectors,['request'=>new \LarDebug\Collectors\RequestCollector($this->app->make(Request::class))]);
-        $collectors = array_merge($collectors,['query'=>new \LarDebug\Collectors\QueryCollector($this->app->make('db'))]);
-        $collectors = array_merge($collectors,['message'=>new \LarDebug\Collectors\MessageCollector()]);
+        $host = config('lardebug.server.host');
+        $port = config('lardebug.server.port');
 
-        $server = new Server(config('lardebug.server.host'),config('lardebug.server.port'));
-
-        $larDebug = new LarDebug($this->app,$server,$collectors);
-        $this->app->singleton('larDebug',function($app)use($larDebug){
+        $server = new Server($host, $port);
+        $larDebug = new LarDebug($this->app, $server, $this->getCollectors());
+        $this->app->singleton('lardebug', function ($app) use ($larDebug) {
             return $larDebug;
         });
+        $this->app->singleton('lardebug.commands.serve', function ($app) use ($larDebug, $host, $port) {
+            return new StartDebugServer(__DIR__, $host, $port);
+        });
+        $this->registerMiddleware();
+        $this->registerCommands();
+
+    }
+    private function getCollectors()
+    {
+        $collectors = [];
+        $collectors = array_merge($collectors, ['route' => new RouteCollector($this->app->make(Router::class))]);
+        $collectors = array_merge($collectors, ['request' => new RequestCollector($this->app->make(Request::class))]);
+        $collectors = array_merge($collectors, ['query' => new QueryCollector($this->app->make('db'))]);
+        $collectors = array_merge($collectors, ['message' => new MessageCollector()]);
+        return $collectors;
+    }
+    private function registerMiddleware()
+    {
         $this->app->make(\Illuminate\Contracts\Http\Kernel::class)->pushMiddleware(\LarDebug\Middleware::class);
     }
-    
+    private function registerCommands()
+    {
+
+        $this->commands(['lardebug.commands.serve']);
+    }
+
 }
