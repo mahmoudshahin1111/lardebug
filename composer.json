@@ -13,13 +13,14 @@
         }
     ],
     "require": {
-        "php": "^7.2|^8.0"
-    },
-    "require-dev": {
+        "php": "^7.2|^8.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
         "phpunit/phpunit": "^9.3.3"
+    },
+    "require-dev": {
+       
     },
     "autoload": {
         "psr-4": {
