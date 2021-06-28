@@ -4,9 +4,24 @@ use Illuminate\Support\Facades\DB;
 
 
 class QueryCollector implements ICollector{
+    /**
+     * database instance
+     *
+     * @var DB
+     */
     protected $db;
     protected $connection;
+    /**
+     * executed queries
+     *
+     * @var array
+     */
     protected $queries = [];
+    /**
+     * trigger callback for listeners
+     *
+     * @var array
+     */
     protected $onQueryExecutedEvent;
 
     public function __construct($db){

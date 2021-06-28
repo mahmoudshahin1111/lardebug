@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
+use LarDebug\Collectors\EventCollector;
 use LarDebug\Collectors\MessageCollector;
 use LarDebug\Collectors\QueryCollector;
 use LarDebug\Collectors\RequestCollector;
 use LarDebug\Collectors\RouteCollector;
-use LarDebug\Collectors\EventCollector;
 use LarDebug\Command\StartDebugServer;
 
 class Provider extends ServiceProvider
@@ -39,6 +39,9 @@ class Provider extends ServiceProvider
 
         $this->app->singleton('lardebug.server', function () {
             return new Server(config('lardebug.server.host'), config('lardebug.server.port'));
+        });
+        $this->app->singleton('lardebug.exceptionHandler', function () {
+            return new ExceptionHandler($this->app->make('lardebug.server'));
         });
         $larDebug = new LarDebug($this->app, $this->app->make('lardebug.server'), $this->getCollectors());
         $this->app->singleton('lardebug', function ($app) use ($larDebug) {

@@ -13,7 +13,17 @@ use Lib\Collectors\RouteCollector;
 
 class LarDebug
 {
+    /**
+     * server instance  
+     *
+     * @var Server
+     */
     protected $server;
+    /**
+     * array of available collectors 
+     *
+     * @var array
+     */
     protected $collectors;
     public function __construct(App $app,Server $server,$collectors)
     {
