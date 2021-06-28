@@ -9,7 +9,7 @@ use  Illuminate\Foundation\Application as App;
 use Illuminate\Routing\Router;
 use Illuminate\Routing\Route;
 
-class RouteCollector{
+class RouteCollector implements ICollector{
     protected $router;
     protected $payload;
     public function __construct(Router $router){

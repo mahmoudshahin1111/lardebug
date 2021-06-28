@@ -3,7 +3,7 @@ namespace LarDebug\Collectors;
 use Illuminate\Support\Facades\DB;
 
 
-class QueryCollector{
+class QueryCollector implements ICollector{
     protected $db;
     protected $connection;
     protected $queries = [];

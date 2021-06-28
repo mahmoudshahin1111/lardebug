@@ -4,7 +4,7 @@ namespace LarDebug\Collectors;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-class RequestCollector{
+class RequestCollector implements ICollector{
     protected $request;
     public function __construct(Request $request){
         $this->request = $request;

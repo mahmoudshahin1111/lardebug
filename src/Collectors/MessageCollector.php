@@ -2,7 +2,7 @@
 
 namespace LarDebug\Collectors;
 
-class MessageCollector
+class MessageCollector implements ICollector
 {
     protected $messages = [];
     public function __construct()
