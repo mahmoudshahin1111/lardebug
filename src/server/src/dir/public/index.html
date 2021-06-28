@@ -51,6 +51,7 @@
         .la-routes {
             border: 1px solid white;
             padding: 0.25rem;
+            height: 200px;
             overflow-y: auto;
         }
         .la-routes .la-title{
@@ -62,6 +63,7 @@
             border: 1px solid white;
             padding: 0.25rem;
             overflow-y: auto;
+            height: 200px;
         }
         .la-request .la-title{
             position: sticky;
@@ -72,6 +74,7 @@
             border: 1px solid white;
             padding: 0.25rem;
             overflow-y: auto;
+            height: 200px;
         }
         .la-query .la-title{
             position: sticky;
@@ -83,6 +86,7 @@
             color: rgb(35, 218, 65);
             height: 200px;
             overflow-y: auto;
+            height: 200px;
         }
         .la-request .la-title{
             position: sticky;
@@ -122,22 +126,26 @@
     <div id="app" class="la-app">
 
         <div class="row">
-            <form action="" class="col-6 border border-success gx-0">
+            <form  class="col-12 border border-success gx-0">
                 <fieldset>
                     <label for="">Select Request</label>
-                    <select name="" id="" v-model="collection" placeholder="choose request">
+                    <select name="" id="collection-select" v-model="collection" placeholder="choose request">
                         <option selected disabled>choose request</option>
                         <option v-for="_collection,index in collections" v-bind:value="_collection">#{{index}}
                             {{_collection.request.id}} {{_collection.request.ajax === true?'ajax':''}}</option>
                     </select>
                 </fieldset>
+                <fieldset>
+                    <label for="">Auto Select Last Request</label>
+                    <input type="checkbox" name="selectLastRequestEnabled" v-model="selectLastRequestEnabled" checked>
+                </fieldset>
             </form>
 
         </div>
-        <div v-if="collection" class="row p-2">
+        <div v-if="collection" class="row">
 
-            <div class="la-routes col-6">
-                <h1>Route</h1>
+            <div class="la-routes col-12 col-lg-6">
+                <h1 class="la-title">Route</h1>
                 <table class="col-12 table table-bordered text-green">
                     <thead>
                         <th scope="col">prefix</th>
@@ -177,8 +185,8 @@
 
                 </table>
             </div>
-            <div class="la-request col-6">
-                <h1>Request</h1>
+            <div class="la-request col-12 col-lg-6">
+                <h1 class="la-title">Request</h1>
                 <p v-if="collection.request.inputs">
                     <strong>inputs:</strong>
                 <ul v-for="value,name in collection.request.inputs">
@@ -208,8 +216,8 @@
                 <p><strong>authenticated:</strong>{{collection.request.auth?'yes':'no'}}</p>
             </div>
 
-            <div class="la-query col-6">
-                <h1>Queries</h1>
+            <div class="la-query col-12 col-lg-6">
+                <h1 class="la-title">Queries</h1>
                 <table v-if="collection.queries.length > 0" class="col-12 table table-bordered text-green">
                     <thead>
                         <tr>
@@ -228,7 +236,7 @@
                     <p>No Queries In The Request</p>
                 </div>
             </div>
-            <div class="la-request-debug col-6 p-2">
+            <div class="la-request-debug   col-12 col-lg-6">
                 <h1>Messages</h1>
                 <ul class="p-0 m-0 list" v-if="collection.messages">
                     <li v-for="message in collection.messages" class="list-item">
@@ -244,15 +252,15 @@
             No Requests
         </div>
        <div class="row">
-        <div class="la-console-log col-6">
-            <h1>Console</h1>
+        <div class="la-console-log col-12 col-lg-6">
+            <h1 class="la-title">Console</h1>
             <ul class="p-0 m-0 list" v-if="console">
                 <li v-for="logMessage,index in console" class="list-item">
                     <p>{{index}} # {{toData(logMessage.time)}} - {{logMessage.body}}</p>
                 </li>
             </ul>
         </div>
-        <div class="la-events col-6">
+        <div class="la-events col-12 col-lg-6">
             <h1 class="la-title">events</h1>
             <ul>
                 <li v-for="event,index in collection?.events">
@@ -280,6 +288,7 @@
                     collection: null,
                     collections: [],
                     console:[],
+                    selectLastRequestEnabled:false,
                 },
                 methods:{
                     toData:function (milliseconds){
@@ -291,8 +300,10 @@
                         this.running = true;
                     });
                     socket.on('collect', (data) => {
-                        console.log(data);
                         this.collections.push(data);
+                        if(this.selectLastRequestEnabled){
+                            this.collection = data;
+                        }
                     });
                     socket.on('console', (data) => {
                         this.console.push(data);
