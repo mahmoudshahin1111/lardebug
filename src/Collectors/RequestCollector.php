@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 class RequestCollector implements ICollector{
     protected $request;
+    protected $data = [];
     public function __construct(Request $request){
         $this->request = $request;
     }
@@ -15,7 +16,7 @@ class RequestCollector implements ICollector{
             'method'=>$this->request->method(),
             'url'=>$this->request->url(),
             'auth'=>$this->isAuthorized(),
-            'ajax'=>$this->request->ajax()
+            'ajax'=>$this->isAjax()
         ];
         if(!empty($this->request->input('*'))){
            $data =  array_merge($data,['inputs'=>$this->request->toArray()]);
@@ -28,6 +29,12 @@ class RequestCollector implements ICollector{
         }
         return $data;
         
+    }
+
+    protected function isAjax(){
+        $isXMLRequest = $this->request->isXmlHttpRequest() || $this->request->headers->get('X-Livewire');
+        $acceptable = $this->request->getAcceptableContentTypes();
+        return (isset($acceptable[0]) && $acceptable[0] == 'application/json');
     }
     protected function isAuthorized(){
         return isset($this->request->user)?true:false;

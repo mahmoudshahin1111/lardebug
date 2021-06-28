@@ -11,6 +11,7 @@ use LarDebug\Collectors\MessageCollector;
 use LarDebug\Collectors\QueryCollector;
 use LarDebug\Collectors\RequestCollector;
 use LarDebug\Collectors\RouteCollector;
+use LarDebug\Collectors\EventCollector;
 use LarDebug\Command\StartDebugServer;
 
 class Provider extends ServiceProvider
@@ -46,7 +47,7 @@ class Provider extends ServiceProvider
         $this->app->singleton('lardebug.commands.serve', function ($app) use ($larDebug) {
             return new StartDebugServer(__DIR__, config('lardebug.server.host'), config('lardebug.server.port'));
         });
-
+        // dd($this->app['exception']);
     }
     private function registerConfig()
     {
@@ -60,8 +61,9 @@ class Provider extends ServiceProvider
         $collectors = [];
         $collectors = array_merge($collectors, ['route' => new RouteCollector($this->app->make(Router::class))]);
         $collectors = array_merge($collectors, ['request' => new RequestCollector($this->app->make(Request::class))]);
-        $collectors = array_merge($collectors, ['query' => new QueryCollector($this->app->make('db'))]);
+        $collectors = array_merge($collectors, ['query' => new QueryCollector($this->app['db'])]);
         $collectors = array_merge($collectors, ['message' => new MessageCollector()]);
+        $collectors = array_merge($collectors, ['events' => new EventCollector($this->app['events'])]);
         return $collectors;
     }
     private function registerMiddleware()

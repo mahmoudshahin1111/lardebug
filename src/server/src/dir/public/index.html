@@ -15,7 +15,10 @@
         html,
         body {
             font-family: 'Inconsolata', monospace;
-
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+            font-weight: 400;
         }
 
         *::-webkit-scrollbar {
@@ -42,6 +45,7 @@
             overflow-y: auto;
             overflow-x: hidden;
             gap: 0.25rem;
+            padding: calc(1.5rem + 10px);
         }
 
         .la-routes {
@@ -49,33 +53,65 @@
             padding: 0.25rem;
             overflow-y: auto;
         }
-
+        .la-routes .la-title{
+            position: sticky;
+            top: 0;
+            background-color: black;
+        }
         .la-request {
             border: 1px solid white;
             padding: 0.25rem;
             overflow-y: auto;
         }
-
+        .la-request .la-title{
+            position: sticky;
+            top: 0;
+            background-color: black;
+        }
         .la-query {
             border: 1px solid white;
             padding: 0.25rem;
             overflow-y: auto;
         }
-
+        .la-query .la-title{
+            position: sticky;
+            top: 0;
+            background-color: black;
+        }
         .la-request-debug {
             border: 1px solid white;
             color: rgb(35, 218, 65);
             height: 200px;
             overflow-y: auto;
         }
-
+        .la-request .la-title{
+            position: sticky;
+            top: 0;
+            background-color: black;
+        }
         .la-console-log {
             border: 1px solid white;
             color: rgb(35, 218, 65);
             height: 200px;
             overflow-y: auto;
         }
+        .la-console-log .la-title{
+            position: sticky;
+            top: 0;
+            background-color: black;
+        }
+        .la-events{
+            border: 1px solid white;
+            color: rgb(35, 218, 65);
+            height: 200px;
+            overflow-y: auto;
 
+        }
+        .la-events .la-title{
+            position: sticky;
+            top: 0;
+            background-color: black;
+        }
         .text-green {
             color: rgb(35, 218, 65);
         }
@@ -207,6 +243,7 @@
         <div v-if="!collection">
             No Requests
         </div>
+       <div class="row">
         <div class="la-console-log col-6">
             <h1>Console</h1>
             <ul class="p-0 m-0 list" v-if="console">
@@ -215,6 +252,15 @@
                 </li>
             </ul>
         </div>
+        <div class="la-events col-6">
+            <h1 class="la-title">events</h1>
+            <ul>
+                <li v-for="event,index in collection?.events">
+                    {{event}}
+                </li>
+            </ul>
+        </div>
+       </div>
     </div>
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"

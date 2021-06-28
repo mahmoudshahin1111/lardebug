@@ -47,6 +47,7 @@ class LarDebug
             'request' =>$this->collectors['request']->collect(),
             'queries' => $this->collectors['query']->collect(),
             'messages' => $this->collectors['message']->collect(),
+            'events' => $this->collectors['events']->collect(),
         ]);
     }
     public function sendEndSignal()
