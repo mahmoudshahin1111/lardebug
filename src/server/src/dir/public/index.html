@@ -48,6 +48,11 @@
             padding: calc(1.5rem + 10px);
         }
 
+        .la-collection-select{
+            max-width: 100vw;
+            width: 200px;
+        }
+
         .la-routes {
             border: 1px solid white;
             padding: 0.25rem;
@@ -126,18 +131,18 @@
     <div id="app" class="la-app">
 
         <div class="row">
-            <form  class="col-12 border border-success gx-0">
+            <form  class="col-12 border border-success  d-flex flex-lg-row flex-column gap-2">
                 <fieldset>
-                    <label for="">Select Request</label>
-                    <select name="" id="collection-select" v-model="collection" placeholder="choose request">
+                    <label for="collection-select">Select Request</label>
+                    <select name="" id="collection-select" class="la-collection-select" v-model="collection" placeholder="choose request">
                         <option selected disabled>choose request</option>
                         <option v-for="_collection,index in collections" v-bind:value="_collection">#{{index}}
                             {{_collection.request.id}} {{_collection.request.ajax === true?'ajax':''}}</option>
                     </select>
                 </fieldset>
                 <fieldset>
-                    <label for="">Auto Select Last Request</label>
-                    <input type="checkbox" name="selectLastRequestEnabled" v-model="selectLastRequestEnabled" checked>
+                    <label for="select-last-request-enabled-checkbox">Auto Select Last Request</label>
+                    <input type="checkbox" id="select-last-request-enabled-checkbox" name="selectLastRequestEnabled" v-model="selectLastRequestEnabled" checked>
                 </fieldset>
             </form>
 
