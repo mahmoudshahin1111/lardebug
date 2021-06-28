@@ -4,6 +4,7 @@
   "description": "",
   "main": "/",
   "scripts": {
+    "build":"tsc",
     "serve": "concurrently  \"tsc --watch\" \"nodemon src/dir/index.js\""
   },
   "author": "",

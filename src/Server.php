@@ -12,7 +12,7 @@ class Server{
     public function __construct($host,$port){
         $this->host = $host;
         $this->port = $port;
-        $this->prefix = 'laravelAnalysis';
+        $this->prefix = 'lardebug';
     }
     public function sendPayload($prefix,$payload){
         $response = Http::post($this->getServerEndpoint().'/'.$prefix,$payload);

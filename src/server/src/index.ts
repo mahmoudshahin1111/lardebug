@@ -15,28 +15,28 @@ app.get("*", function (req: express.Request, res: express.Response) {
   return res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 app.post(
-  "/laravelAnalysis/start",
+  "/lardebug/start",
   function (req: express.Request, res: express.Response) {
     io.emit("start",null);
     res.status(200).send();
   }
 );
 app.post(
-  "/laravelAnalysis/collect",
+  "/lardebug/collect",
   function (req: express.Request, res: express.Response) {
     io.emit("collect",req.body);
     res.status(200).send();
   }
 );
 app.post(
-  "/laravelAnalysis/console",
+  "/lardebug/console",
   function (req: express.Request, res: express.Response) {
     io.emit("console",req.body);
     res.status(200).send();
   }
 );
 app.post(
-  "/laravelAnalysis/end",
+  "/lardebug/end",
   function (req: express.Request, res: express.Response) {
     io.emit("end",null);
     res.status(200).send();

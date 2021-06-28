@@ -33,19 +33,19 @@ app.use(express.static("public"));
 app.get("*", function (req, res) {
     return res.sendFile(path.join(__dirname, "/public/index.html"));
 });
-app.post("/laravelAnalysis/start", function (req, res) {
+app.post("/lardebug/start", function (req, res) {
     io.emit("start", null);
     res.status(200).send();
 });
-app.post("/laravelAnalysis/collect", function (req, res) {
+app.post("/lardebug/collect", function (req, res) {
     io.emit("collect", req.body);
     res.status(200).send();
 });
-app.post("/laravelAnalysis/console", function (req, res) {
+app.post("/lardebug/console", function (req, res) {
     io.emit("console", req.body);
     res.status(200).send();
 });
-app.post("/laravelAnalysis/end", function (req, res) {
+app.post("/lardebug/end", function (req, res) {
     io.emit("end", null);
     res.status(200).send();
 });

@@ -39,7 +39,7 @@ class Provider extends ServiceProvider
         $this->app->singleton('lardebug.server', function () {
             return new Server(config('lardebug.server.host'), config('lardebug.server.port'));
         });
-        $larDebug = new LarDebug($this->app, $server, $this->getCollectors());
+        $larDebug = new LarDebug($this->app, $this->app->make('lardebug.server'), $this->getCollectors());
         $this->app->singleton('lardebug', function ($app) use ($larDebug) {
             return $larDebug;
         });
