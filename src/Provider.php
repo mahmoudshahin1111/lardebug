@@ -13,6 +13,7 @@ use LarDebug\Collectors\QueryCollector;
 use LarDebug\Collectors\RequestCollector;
 use LarDebug\Collectors\RouteCollector;
 use LarDebug\Command\StartDebugServer;
+use Illuminate\Foundation\Bootstrap\HandleExceptions;
 
 class Provider extends ServiceProvider
 {
@@ -23,7 +24,13 @@ class Provider extends ServiceProvider
      */
     public function register()
     {
-
+        $this->registerCommands();
+        $this->registerConfig();
+        $this->registerMiddleware();
+        $this->registerServer();
+        $this->registerExceptionHandler();
+        $this->registerLarDebug();
+        $this->registerCommands();
     }
 
     /**
@@ -33,24 +40,34 @@ class Provider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerCommands();
-        $this->registerConfig();
-        $this->registerMiddleware();
-
+    }
+    private function registerCommands()
+    {
+        $this->app->singleton('lardebug.commands.serve', function ($app) {
+            return new StartDebugServer(__DIR__, config('lardebug.server.host'), config('lardebug.server.port'));
+        });
+        $this->commands(['lardebug.commands.serve']);
+    }
+    private function registerLarDebug()
+    {
+        $this->app->singleton('lardebug', function () {
+            return new LarDebug(
+                $this->app->make('lardebug.server'),
+                $this->getCollectors(),
+            );
+        });
+    }
+    private function registerExceptionHandler()
+    {
+        $this->app->singleton('lardebug.exceptionHandler', function () {
+            return new ExceptionHandler(app(HandleExceptions::class), $this->app->make('lardebug.server'));
+        });
+    }
+    private function registerServer()
+    {
         $this->app->singleton('lardebug.server', function () {
             return new Server(config('lardebug.server.host'), config('lardebug.server.port'));
         });
-        $this->app->singleton('lardebug.exceptionHandler', function () {
-            return new ExceptionHandler($this->app->make('lardebug.server'));
-        });
-        $larDebug = new LarDebug($this->app, $this->app->make('lardebug.server'), $this->getCollectors());
-        $this->app->singleton('lardebug', function ($app) use ($larDebug) {
-            return $larDebug;
-        });
-        $this->app->singleton('lardebug.commands.serve', function ($app) use ($larDebug) {
-            return new StartDebugServer(__DIR__, config('lardebug.server.host'), config('lardebug.server.port'));
-        });
-        // dd($this->app['exception']);
     }
     private function registerConfig()
     {
@@ -73,10 +90,4 @@ class Provider extends ServiceProvider
     {
         $this->app->make(\Illuminate\Contracts\Http\Kernel::class)->pushMiddleware(\LarDebug\Middleware::class);
     }
-    private function registerCommands()
-    {
-
-        $this->commands(['lardebug.commands.serve']);
-    }
-
 }

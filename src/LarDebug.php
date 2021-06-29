@@ -10,9 +10,16 @@ use Lib\Collectors\MessageCollector;
 use Lib\Collectors\QueryCollector;
 use Lib\Collectors\RequestCollector;
 use Lib\Collectors\RouteCollector;
+use LarDebug\ExceptionHandler;
 
 class LarDebug
 {
+    /**
+     * laravel app instance
+     *
+     * @var App
+     */
+    protected $app;
     /**
      * server instance  
      *
@@ -25,13 +32,20 @@ class LarDebug
      * @var array
      */
     protected $collectors;
-    public function __construct(App $app,Server $server,$collectors)
+    /**
+     * Undocumented variable
+     *
+     * @var ExceptionHandler
+     */
+    protected $exceptionHandler;
+
+
+    public function __construct(Server $server,$collectors,App $app= null,$exceptionHandler = null)
     {
-        if (!isset($app)) {
-            $this->app = app();
-        }
+        $this->app = isset($app)?$app:app();
         $this->server = $server;
         $this->collectors = $collectors;
+        $this->exceptionHandler = isset($exceptionHandler)?$exceptionHandler:$this->app->make('lardebug.exceptionHandler');
     }
 
     public function addMessage($body)
