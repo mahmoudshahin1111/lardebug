@@ -48,18 +48,29 @@ io.on("connection", function (socket) {
 });
 
 
+interface IConfig {
+  server: {
+    host: string,
+    port: number;
+  }
+}
 class ServerConfigManager {
-  private config = null;
+  private config: IConfig | null = null;
   constructor() {
 
   }
 
   boot() {
     this.loadConfig();
-
+  }
+  public getPort() {
+    return this.config?.server.port;
+  }
+  public getHost() {
+    return this.config?.server.host;
   }
   private loadConfig() {
-    this.config =  require(this.getConfigFilePath());
+    this.config = require(this.getConfigFilePath());
   }
   private getConfigFilePath() {
     return path.join(__dirname, '/../../../../config/lardebug.json');
@@ -70,6 +81,8 @@ class ServerConfigManager {
 
 const serverConfigManager = new ServerConfigManager();
 serverConfigManager.boot();
-server.listen(3000, function () {
-  console.log("server listen on port 3000");
+
+
+server.listen(serverConfigManager.getPort(), function () {
+  console.log(`debug server on ${serverConfigManager.getHost()}:${serverConfigManager.getPort()}`);
 });

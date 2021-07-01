@@ -22,13 +22,13 @@ class LarDebug
      */
     protected $app;
     /**
-     * server instance  
+     * server instance
      *
      * @var Server
      */
     protected $server;
     /**
-     * array of available collectors 
+     * array of available collectors
      *
      * @var array
      */
@@ -46,7 +46,7 @@ class LarDebug
      */
     protected $serverConfigManager;
 
-    public function __construct(Server $server,$collectors,App $app= null,$exceptionHandler = null,$serverConfigManager=null)
+    public function __construct(Server $server, $collectors, App $app= null, $exceptionHandler = null, $serverConfigManager=null)
     {
         $this->app = isset($app)?$app:app();
         $this->server = $server;
@@ -58,8 +58,9 @@ class LarDebug
     {
         $this->collectors['message']->addMessage($body);
     }
-    public function addConsoleMessage($body){
-        $this->server->sendPayload('console',[
+    public function addConsoleMessage($body)
+    {
+        $this->server->sendPayload('console', [
             'id' => \uniqid('message_'),
             'time' => \microtime(true) * 1000,
             'body' => $body,

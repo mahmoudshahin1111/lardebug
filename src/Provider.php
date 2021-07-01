@@ -42,9 +42,6 @@ class Provider extends ServiceProvider
      */
     public function boot()
     {
-      
-    }
-    private function bootServerConfigManager(){
         $this->app->make(ServerConfigManager::class)->boot();
     }
     private function registerServerConfigManager(){

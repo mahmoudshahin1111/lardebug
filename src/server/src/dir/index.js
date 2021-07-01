@@ -59,6 +59,14 @@ var ServerConfigManager = /** @class */ (function () {
     ServerConfigManager.prototype.boot = function () {
         this.loadConfig();
     };
+    ServerConfigManager.prototype.getPort = function () {
+        var _a;
+        return (_a = this.config) === null || _a === void 0 ? void 0 : _a.server.port;
+    };
+    ServerConfigManager.prototype.getHost = function () {
+        var _a;
+        return (_a = this.config) === null || _a === void 0 ? void 0 : _a.server.host;
+    };
     ServerConfigManager.prototype.loadConfig = function () {
         this.config = require(this.getConfigFilePath());
     };
@@ -69,6 +77,6 @@ var ServerConfigManager = /** @class */ (function () {
 }());
 var serverConfigManager = new ServerConfigManager();
 serverConfigManager.boot();
-server.listen(3000, function () {
-    console.log("server listen on port 3000");
+server.listen(serverConfigManager.getPort(), function () {
+    console.log("debug server on " + serverConfigManager.getHost() + ":" + serverConfigManager.getPort());
 });
