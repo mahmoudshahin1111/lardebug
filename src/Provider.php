@@ -13,6 +13,7 @@ use LarDebug\Collectors\QueryCollector;
 use LarDebug\Collectors\RequestCollector;
 use LarDebug\Collectors\RouteCollector;
 use LarDebug\Command\StartDebugServer;
+use LarDebug\ServerConfigManager;
 use Illuminate\Foundation\Bootstrap\HandleExceptions;
 
 class Provider extends ServiceProvider
@@ -26,13 +27,14 @@ class Provider extends ServiceProvider
     {
         $this->registerCommands();
         $this->registerConfig();
+        $this->registerServerConfigManager();
         $this->registerMiddleware();
         $this->registerServer();
         $this->registerExceptionHandler();
         $this->registerLarDebug();
         $this->registerCommands();
     }
-
+   
     /**
      * Bootstrap services.
      *
@@ -40,6 +42,15 @@ class Provider extends ServiceProvider
      */
     public function boot()
     {
+      
+    }
+    private function bootServerConfigManager(){
+        $this->app->make(ServerConfigManager::class)->boot();
+    }
+    private function registerServerConfigManager(){
+        $this->app->singleton(ServerConfigManager::class, function ($app) {
+            return new ServerConfigManager(\config('lardebug'),$this->getConfigPath());
+        });
     }
     private function registerCommands()
     {
@@ -71,10 +82,17 @@ class Provider extends ServiceProvider
     }
     private function registerConfig()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/lardebug.php', 'lardebug');
+        $this->mergeConfigFrom($this->getConfigPath()."/". $this->getConfigFileName(), 'lardebug');
         $this->publishes([
-            __DIR__ . '/config/lardebug.php' => \config_path('/lardebug.php'),
+            $this->getConfigPath()."/". $this->getConfigFileName() => \config_path('/lardebug.php'),
         ], 'lardebug-configs');
+    }
+    private function getConfigPath()
+    {
+        return __DIR__ . '/../config';
+    }
+    private function getConfigFileName(){
+        return '/lardebug.php';
     }
     private function getCollectors()
     {

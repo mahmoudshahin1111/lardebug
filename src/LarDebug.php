@@ -11,6 +11,7 @@ use Lib\Collectors\QueryCollector;
 use Lib\Collectors\RequestCollector;
 use Lib\Collectors\RouteCollector;
 use LarDebug\ExceptionHandler;
+use LarDebug\ServerConfigManager;
 
 class LarDebug
 {
@@ -38,16 +39,21 @@ class LarDebug
      * @var ExceptionHandler
      */
     protected $exceptionHandler;
+    /**
+     * Undocumented variable
+     *
+     * @var ServerConfigManager
+     */
+    protected $serverConfigManager;
 
-
-    public function __construct(Server $server,$collectors,App $app= null,$exceptionHandler = null)
+    public function __construct(Server $server,$collectors,App $app= null,$exceptionHandler = null,$serverConfigManager=null)
     {
         $this->app = isset($app)?$app:app();
         $this->server = $server;
         $this->collectors = $collectors;
         $this->exceptionHandler = isset($exceptionHandler)?$exceptionHandler:$this->app->make('lardebug.exceptionHandler');
+        $this->serverConfigManager = isset($serverConfigManager)?$serverConfigManager:app(ServerConfigManager::class);
     }
-
     public function addMessage($body)
     {
         $this->collectors['message']->addMessage($body);

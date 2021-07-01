@@ -52,6 +52,23 @@ app.post("/lardebug/end", function (req, res) {
 io.on("connection", function (socket) {
     console.log("client listening io " + socket.id);
 });
+var ServerConfigManager = /** @class */ (function () {
+    function ServerConfigManager() {
+        this.config = null;
+    }
+    ServerConfigManager.prototype.boot = function () {
+        this.loadConfig();
+    };
+    ServerConfigManager.prototype.loadConfig = function () {
+        this.config = require(this.getConfigFilePath());
+    };
+    ServerConfigManager.prototype.getConfigFilePath = function () {
+        return path.join(__dirname, '/../../../../config/lardebug.json');
+    };
+    return ServerConfigManager;
+}());
+var serverConfigManager = new ServerConfigManager();
+serverConfigManager.boot();
 server.listen(3000, function () {
     console.log("server listen on port 3000");
 });
