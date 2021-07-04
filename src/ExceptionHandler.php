@@ -20,25 +20,23 @@ class ExceptionHandler{
             $this->server = $server;
             $this->handler = $handler;  
     }
-    protected function listen(){
-      dd(1);
-      error_reporting(-1);
-
-      // set_error_handler([$this, 'onExceptionTriggered']);
-
-      set_exception_handler([$this, 'onExceptionTriggered']);
-
-      // set_exception_handler([$this, 'onExceptionTriggered']);
-      // $this->handler->reportable(function (Throwable $e) {
-      //   file_put_contents(\public_path("/text.txt"),"qwdqwdqwd");
-      // });
-      // dd($this->handler);
+    public function bootstrap(){
+      $this->registerListeners();
     }
-    protected function onExceptionTriggered(Throwable $e){
-      $this->sendExceptionToServer();
+    public function registerListeners(){
+      set_error_handler([$this, 'handleError']);
+      set_exception_handler([$this,'handleException']);
+
     }
-    protected function sendExceptionToServer(){
-      file_put_contents(\public_path("/text.txt"),"qwdqwdqwd");
+    public  function handleException($e){
+      // dd(1);
+      file_put_contents(\public_path("/text.txt"),"exception");
+    }
+    public function handleError(){
+      file_put_contents(\public_path("/text.txt"),"error");
+    }
+    public function sendExceptionToServer(){
+ 
     }
    
 }

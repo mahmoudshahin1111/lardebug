@@ -54,10 +54,9 @@ class LarDebug
         $this->exceptionHandler = isset($exceptionHandler)?$exceptionHandler:$this->app->make(ExceptionHandler::class);
         $this->serverConfigManager = isset($serverConfigManager)?$serverConfigManager:app(ServerConfigManager::class);
     }
-    public function run()
+    public function bootstrap()
     {
-        $this->server->run();
-        $this->exceptionHandler->listen();
+        $this->exceptionHandler->bootstrap();
     }
     public function addMessage($body)
     {

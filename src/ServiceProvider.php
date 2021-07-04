@@ -6,7 +6,7 @@ use Illuminate\Foundation\Application as App;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\ServiceProvider as Provider;
 use LarDebug\Collectors\EventCollector;
 use LarDebug\Collectors\MessageCollector;
 use LarDebug\Collectors\QueryCollector;
@@ -16,7 +16,7 @@ use LarDebug\Command\StartDebugServer;
 use LarDebug\ServerConfigManager;
 use Illuminate\Foundation\Bootstrap\HandleExceptions;
 
-class Provider extends ServiceProvider
+class ServiceProvider extends Provider
 {
     /**
      * Register services.
@@ -41,7 +41,7 @@ class Provider extends ServiceProvider
      */
     public function boot()
     {
-       
+       $this->app->make(\LarDebug::class)->bootstrap();
     }
     private function registerServerConfigManager(){
         $this->app->singleton(ServerConfigManager::class, function ($app) {
