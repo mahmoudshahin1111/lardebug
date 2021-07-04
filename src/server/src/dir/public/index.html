@@ -145,7 +145,7 @@
 
         <div class="row">
             <form class="col-12 border border-success  d-flex flex-lg-row flex-column gap-2">
-                <fieldset>
+                <fieldset class="d-flex flex-row justify-content-center align-items-center gap-1">
                     <label for="collection-select">Select Request</label>
                     <select name="" id="collection-select" class="la-collection-select" v-model="collection"
                         placeholder="choose request">
@@ -154,7 +154,7 @@
                             {{_collection.request.id}} {{_collection.request.ajax === true?'ajax':''}}</option>
                     </select>
                 </fieldset>
-                <fieldset>
+                <fieldset class="d-flex flex-row justify-content-center align-items-center gap-1">
                     <label for="select-last-request-enabled-checkbox">Auto Select Last Request</label>
                     <input type="checkbox" id="select-last-request-enabled-checkbox" name="selectLastRequestEnabled"
                         v-model="selectLastRequestEnabled" checked>
