@@ -17,7 +17,7 @@ class ServerConfigManager
         $this->configs = $configs;
         $this->configPath = $configPath;
     }
-    public function boot()
+    public function run()
     {
         $this->updateServerConfigFile();
     }

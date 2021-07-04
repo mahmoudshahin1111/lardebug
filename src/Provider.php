@@ -25,14 +25,13 @@ class Provider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerLarDebug();
         $this->registerCommands();
         $this->registerConfig();
         $this->registerServerConfigManager();
         $this->registerMiddleware();
         $this->registerServer();
         $this->registerExceptionHandler();
-        $this->registerLarDebug();
-        $this->registerCommands();
     }
    
     /**
@@ -42,7 +41,7 @@ class Provider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->make(ServerConfigManager::class)->boot();
+       
     }
     private function registerServerConfigManager(){
         $this->app->singleton(ServerConfigManager::class, function ($app) {
@@ -58,22 +57,21 @@ class Provider extends ServiceProvider
     }
     private function registerLarDebug()
     {
-        $this->app->singleton('lardebug', function () {
+        $this->app->singleton(\LarDebug::class, function () {
             return new LarDebug(
-                $this->app->make('lardebug.server'),
                 $this->getCollectors(),
             );
         });
     }
     private function registerExceptionHandler()
     {
-        $this->app->singleton('lardebug.exceptionHandler', function () {
-            return new ExceptionHandler(app(HandleExceptions::class), $this->app->make('lardebug.server'));
+        $this->app->singleton(ExceptionHandler::class, function () {
+            return new ExceptionHandler(app(HandleExceptions::class), $this->app->make(Server::class));
         });
     }
     private function registerServer()
     {
-        $this->app->singleton('lardebug.server', function () {
+        $this->app->singleton(Server::class, function () {
             return new Server(config('lardebug.server.host'), config('lardebug.server.port'));
         });
     }

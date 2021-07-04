@@ -18,12 +18,10 @@ class ExceptionHandler{
     private $handler;
     public function __construct($handler,$server){
             $this->server = $server;
-            $this->handler = $handler;
-            $this->listenToExceptions();
-  
+            $this->handler = $handler;  
     }
-    protected function listenToExceptions(){
-    
+    protected function listen(){
+      dd(1);
       error_reporting(-1);
 
       // set_error_handler([$this, 'onExceptionTriggered']);

@@ -10,7 +10,7 @@ use Closure;
 
 class Middleware{
     public function handle (Request $request,Closure $next){
-        $larDebug = app('lardebug');
+        $larDebug = app(\LarDebug::class);
         $larDebug->sendStartSignal();
         $response =  $next($request);
         $larDebug->sendCollectToServer();

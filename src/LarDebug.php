@@ -46,13 +46,18 @@ class LarDebug
      */
     protected $serverConfigManager;
 
-    public function __construct(Server $server, $collectors, App $app= null, $exceptionHandler = null, $serverConfigManager=null)
+    public function __construct(array $collectors,Server $server = null, App $app= null, $exceptionHandler = null, $serverConfigManager=null)
     {
         $this->app = isset($app)?$app:app();
-        $this->server = $server;
         $this->collectors = $collectors;
-        $this->exceptionHandler = isset($exceptionHandler)?$exceptionHandler:$this->app->make('lardebug.exceptionHandler');
+        $this->server = isset($server)?$server:$this->app->make(Server::class);
+        $this->exceptionHandler = isset($exceptionHandler)?$exceptionHandler:$this->app->make(ExceptionHandler::class);
         $this->serverConfigManager = isset($serverConfigManager)?$serverConfigManager:app(ServerConfigManager::class);
+    }
+    public function run()
+    {
+        $this->server->run();
+        $this->exceptionHandler->listen();
     }
     public function addMessage($body)
     {
