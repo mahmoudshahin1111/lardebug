@@ -9,8 +9,6 @@ use Illuminate\Routing\Router;
 use Lib\Collectors\MessageCollector;
 use Lib\Collectors\QueryCollector;
 use Lib\Collectors\RequestCollector;
-use Lib\Collectors\RouteCollector;
-use LarDebug\ExceptionHandler;
 use LarDebug\ServerConfigManager;
 
 class LarDebug
@@ -46,17 +44,16 @@ class LarDebug
      */
     protected $serverConfigManager;
 
-    public function __construct(array $collectors,Server $server = null, App $app= null, $exceptionHandler = null, $serverConfigManager=null)
+    public function __construct(array $collectors,Server $server = null, App $app= null, $serverConfigManager=null)
     {
         $this->app = isset($app)?$app:app();
         $this->collectors = $collectors;
         $this->server = isset($server)?$server:$this->app->make(Server::class);
-        $this->exceptionHandler = isset($exceptionHandler)?$exceptionHandler:$this->app->make(ExceptionHandler::class);
         $this->serverConfigManager = isset($serverConfigManager)?$serverConfigManager:app(ServerConfigManager::class);
     }
     public function bootstrap()
     {
-        $this->exceptionHandler->bootstrap();
+    
     }
     public function addMessage($body)
     {
@@ -83,10 +80,14 @@ class LarDebug
             'queries' => $this->collectors['query']->collect(),
             'messages' => $this->collectors['message']->collect(),
             'events' => $this->collectors['events']->collect(),
+            'exceptions' => $this->collectors['exceptions']->collect(),
         ]);
     }
     public function sendEndSignal()
     {
         $this->server->sendPayload('end', []);
+    }
+    public function getCollector($key){
+        return $this->collectors[$key];
     }
 }

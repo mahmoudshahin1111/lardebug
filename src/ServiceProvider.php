@@ -12,9 +12,9 @@ use LarDebug\Collectors\MessageCollector;
 use LarDebug\Collectors\QueryCollector;
 use LarDebug\Collectors\RequestCollector;
 use LarDebug\Collectors\RouteCollector;
+use LarDebug\Collectors\ExceptionCollector;
 use LarDebug\Command\StartDebugServer;
 use LarDebug\ServerConfigManager;
-use Illuminate\Foundation\Bootstrap\HandleExceptions;
 
 class ServiceProvider extends Provider
 {
@@ -31,7 +31,6 @@ class ServiceProvider extends Provider
         $this->registerServerConfigManager();
         $this->registerMiddleware();
         $this->registerServer();
-        $this->registerExceptionHandler();
     }
    
     /**
@@ -41,11 +40,12 @@ class ServiceProvider extends Provider
      */
     public function boot()
     {
-       $this->app->make(\LarDebug::class)->bootstrap();
+        $this->app->make(\LarDebug::class)->bootstrap();
     }
-    private function registerServerConfigManager(){
+    private function registerServerConfigManager()
+    {
         $this->app->singleton(ServerConfigManager::class, function ($app) {
-            return new ServerConfigManager(\config('lardebug'),$this->getConfigPath());
+            return new ServerConfigManager(\config('lardebug'), $this->getConfigPath());
         });
     }
     private function registerCommands()
@@ -61,12 +61,6 @@ class ServiceProvider extends Provider
             return new LarDebug(
                 $this->getCollectors(),
             );
-        });
-    }
-    private function registerExceptionHandler()
-    {
-        $this->app->singleton(ExceptionHandler::class, function () {
-            return new ExceptionHandler(app(HandleExceptions::class), $this->app->make(Server::class));
         });
     }
     private function registerServer()
@@ -86,7 +80,8 @@ class ServiceProvider extends Provider
     {
         return __DIR__ . '/../config';
     }
-    private function getConfigFileName(){
+    private function getConfigFileName()
+    {
         return '/lardebug.php';
     }
     private function getCollectors()
@@ -97,6 +92,7 @@ class ServiceProvider extends Provider
         $collectors = array_merge($collectors, ['query' => new QueryCollector($this->app['db'])]);
         $collectors = array_merge($collectors, ['message' => new MessageCollector()]);
         $collectors = array_merge($collectors, ['events' => new EventCollector($this->app['events'])]);
+        $collectors = array_merge($collectors, ['exceptions' => new ExceptionCollector()]);
         return $collectors;
     }
     private function registerMiddleware()

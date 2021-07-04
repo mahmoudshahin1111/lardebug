@@ -13,8 +13,16 @@ class Middleware{
         $larDebug = app(\LarDebug::class);
         $larDebug->sendStartSignal();
         $response =  $next($request);
+
+        if (isset($response->exception)) {
+            $larDebug->getCollector('exceptions')->addException($response->exception);
+        }
         $larDebug->sendCollectToServer();
         $larDebug->sendEndSignal();
         return $response;
+    }
+    public function terminate($request, $response)
+    {
+     
     }
 }
