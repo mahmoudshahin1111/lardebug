@@ -133,7 +133,20 @@
             top: 0;
             background-color: black;
         }
-
+        .la-exceptions{
+            border: 1px solid white;
+            color: rgb(218, 35, 35);
+            height: 200px;
+            overflow-y: auto;
+        }
+        .la-exceptions .la-title{
+            position: sticky;
+            top: 0;
+            background-color: black;
+        }
+        .la-exceptions .la-exception{
+            color: white;
+        }
         .text-green {
             color: rgb(35, 218, 65);
         }
@@ -163,7 +176,20 @@
 
         </div>
         <div v-if="collection" class="row">
-
+            <div class="la-exceptions col-12">
+                <h1 class="la-title">Exceptions</h1>
+             
+                    <div v-for="exception in collection.exceptions">
+                        <div class="la-exception">
+                            <div class="la-file">File:{{exception.file}}</div>
+                                <div class="la-message">Message:{{exception.message}}</div>
+                                <div class="la-code">Code:{{exception.code}}</div>
+                                <div class="la-track">Track:{{exception.trackString}}</div>
+                      
+                        </div>
+                    </div>
+                
+            </div>
             <div class="la-routes col-12 col-lg-6">
                 <h1 class="la-title">Route</h1>
                 <table class="col-12 table table-bordered text-green">
