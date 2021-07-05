@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider as Provider;
-use LarDebug\Collectors\EventCollector;
 use LarDebug\Collectors\MessageCollector;
 use LarDebug\Collectors\QueryCollector;
 use LarDebug\Collectors\RequestCollector;
@@ -101,7 +100,6 @@ class ServiceProvider extends Provider
         $collectors = array_merge($collectors, ['request' => new RequestCollector($this->app->make(Request::class))]);
         $collectors = array_merge($collectors, ['query' => new QueryCollector($this->app['db'])]);
         $collectors = array_merge($collectors, ['message' => new MessageCollector()]);
-        $collectors = array_merge($collectors, ['events' => new EventCollector($this->app['events'])]);
         $collectors = array_merge($collectors, ['exceptions' => new ExceptionCollector()]);
         return $collectors;
     }

@@ -298,19 +298,11 @@
             No Requests
         </div>
         <div class="row">
-            <div class="la-console-log col-12 col-lg-6">
+            <div class="la-console-log col-12">
                 <h1 class="la-title">Console</h1>
                 <ul class="p-0 m-0 list" v-if="console">
                     <li v-for="logMessage,index in console" class="list-item">
                         <p>{{index}} # {{toData(logMessage.time)}} - {{logMessage.body}}</p>
-                    </li>
-                </ul>
-            </div>
-            <div class="la-events col-12 col-lg-6">
-                <h1 class="la-title">events</h1>
-                <ul>
-                    <li v-for="event,index in collection?.events">
-                        {{event}}
                     </li>
                 </ul>
             </div>
