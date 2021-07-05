@@ -22,7 +22,7 @@ class QueueEventHandler
         $this->server = $server;
         $this->event = $event;
     }
-    public function bootstrap()
+    public function listen()
     {
         $this->event->listen(JobFailed::class, function(JobFailed $event){
             $this->handleJobFails($event);

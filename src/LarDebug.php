@@ -10,6 +10,7 @@ use Lib\Collectors\MessageCollector;
 use Lib\Collectors\QueryCollector;
 use Lib\Collectors\RequestCollector;
 use LarDebug\ServerConfigManager;
+use LarDebug\EventHandlers\QueueEventHandler;
 
 class LarDebug
 {
@@ -43,6 +44,12 @@ class LarDebug
      * @var ServerConfigManager
      */
     protected $serverConfigManager;
+    /**
+     * Undocumented variable
+     *
+     * @var QueueEventHandler
+     */
+    protected $queueEventHandler;
 
     public function __construct(array $collectors,Server $server = null, App $app= null, $serverConfigManager=null)
     {
@@ -50,10 +57,11 @@ class LarDebug
         $this->collectors = $collectors;
         $this->server = isset($server)?$server:$this->app->make(Server::class);
         $this->serverConfigManager = isset($serverConfigManager)?$serverConfigManager:app(ServerConfigManager::class);
+        $this->queueEventHandler = isset($queueEventHandler)?$queueEventHandler:app(QueueEventHandler::class);
     }
     public function bootstrap()
     {
-    
+        $this->queueEventHandler->listen();
     }
     public function addMessage($body)
     {
