@@ -13,7 +13,6 @@ class ServerConfigManager
      */
     public function __construct($configs,$configPath)
     {
-        //TODO: fix to create file of data saved with application not file.
         $this->configs = $configs;
         $this->configPath = $configPath;
     }

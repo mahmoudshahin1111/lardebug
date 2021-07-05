@@ -15,6 +15,8 @@ use LarDebug\Collectors\RouteCollector;
 use LarDebug\Collectors\ExceptionCollector;
 use LarDebug\Command\StartDebugServer;
 use LarDebug\ServerConfigManager;
+use Illuminate\Support\Facades\Queue;
+use LarDebug\EventHandlers\QueueEventHandler;
 
 class ServiceProvider extends Provider
 {
@@ -31,8 +33,9 @@ class ServiceProvider extends Provider
         $this->registerServerConfigManager();
         $this->registerMiddleware();
         $this->registerServer();
+        $this->registerQueueHandler();
     }
-   
+  
     /**
      * Bootstrap services.
      *
@@ -41,6 +44,13 @@ class ServiceProvider extends Provider
     public function boot()
     {
         $this->app->make(\LarDebug::class)->bootstrap();
+        $this->app->make(QueueEventHandler::class)->bootstrap();
+    }
+    private function registerQueueHandler()
+    {
+        $this->app->singleton(QueueEventHandler::class, function ($app) {
+            return new QueueEventHandler($this->app->make(Server::class),$this->app['events']);
+        });
     }
     private function registerServerConfigManager()
     {
