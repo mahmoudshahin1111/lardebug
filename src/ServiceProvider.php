@@ -43,7 +43,6 @@ class ServiceProvider extends Provider
     public function boot()
     {
         $this->app->make(\LarDebug::class)->bootstrap();
-        $this->app->make(QueueEventHandler::class)->bootstrap();
     }
     private function registerQueueHandler()
     {
