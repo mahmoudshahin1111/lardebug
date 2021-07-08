@@ -14,10 +14,18 @@ class Server{
         $this->port = $port;
         $this->prefix = 'lardebug';
     }
+    public function sendStartSignal()
+    {
+        $this->sendPayload('start', []);
+    }
     public function sendPayload($prefix,$payload){
         $response = Http::post($this->getServerEndpoint().'/'.$prefix,$payload);
         return $response;
     } 
+    public function sendEndSignal()
+    {
+        $this->sendPayload('end', []);
+    }
     private function getServerEndpoint(){
         return "http://{$this->host}:{$this->port}/{$this->prefix}";
     }

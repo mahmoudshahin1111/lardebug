@@ -11,6 +11,8 @@ use Lib\Collectors\QueryCollector;
 use Lib\Collectors\RequestCollector;
 use LarDebug\ServerConfigManager;
 use LarDebug\EventHandlers\QueueEventHandler;
+use LarDebug\Console\Console;
+use LarDebug\Console\Message as ConsoleMessage;
 
 class LarDebug
 {
@@ -45,41 +47,33 @@ class LarDebug
      */
     protected $serverConfigManager;
     /**
-     * Undocumented variable
-     *
-     * @var QueueEventHandler
-     */
-    protected $queueEventHandler;
-
-    public function __construct(array $collectors,Server $server = null, App $app= null, $serverConfigManager=null)
+    * Undocumented variable
+    *
+    * @var Console
+    */
+    protected $console;
+    public function __construct(Server $server = null, App $app= null)
     {
+        $this->collectors = [];
         $this->app = isset($app)?$app:app();
-        $this->collectors = $collectors;
         $this->server = isset($server)?$server:$this->app->make(Server::class);
         $this->serverConfigManager = isset($serverConfigManager)?$serverConfigManager:app(ServerConfigManager::class);
-        $this->queueEventHandler = isset($queueEventHandler)?$queueEventHandler:app(QueueEventHandler::class);
+        $this->console = app(Console::class);
     }
-    public function bootstrap()
+    public function addCollector($key, $collector)
     {
-        $this->queueEventHandler->listen();
+        $this->collectors = array_merge($this->collectors, [$key=>$collector]);
     }
     public function addMessage($body)
     {
         $this->collectors['message']->addMessage($body);
     }
-    public function addConsoleMessage($body)
+    public function consoleLog($body)
     {
-        $this->server->sendPayload('console', [
-            'id' => \uniqid('message_'),
-            'time' => \microtime(true) * 1000,
-            'body' => $body,
-
-        ]);
+        $message= new ConsoleMessage($body);
+        $this->console->send($message);
     }
-    public function sendStartSignal()
-    {
-        $this->server->sendPayload('start', []);
-    }
+   
     public function sendCollectToServer()
     {
         $this->server->sendPayload('collect', [
@@ -90,11 +84,9 @@ class LarDebug
             'exceptions' => $this->collectors['exceptions']->collect(),
         ]);
     }
-    public function sendEndSignal()
+  
+    public function getCollector($key)
     {
-        $this->server->sendPayload('end', []);
-    }
-    public function getCollector($key){
         return $this->collectors[$key];
     }
 }

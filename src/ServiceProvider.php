@@ -16,9 +16,12 @@ use LarDebug\Command\StartDebugServer;
 use LarDebug\ServerConfigManager;
 use Illuminate\Support\Facades\Queue;
 use LarDebug\EventHandlers\QueueEventHandler;
+use \LarDebug\Console\Console;
+use LarDebug\Middleware as LarDebugMiddleware;
 
 class ServiceProvider extends Provider
 {
+
     /**
      * Register services.
      *
@@ -26,13 +29,44 @@ class ServiceProvider extends Provider
      */
     public function register()
     {
-        $this->registerLarDebug();
-        $this->registerCommands();
-        $this->registerConfig();
-        $this->registerServerConfigManager();
-        $this->registerMiddleware();
-        $this->registerServer();
-        $this->registerQueueHandler();
+        $this->app->make(\Illuminate\Contracts\Http\Kernel::class)->pushMiddleware(LarDebugMiddleware::class);
+        $this->app->singleton(RouteCollector::class, function () {
+            return new RouteCollector($this->app->make(Router::class));
+        });
+        $this->app->singleton(RequestCollector::class, function () {
+            return new RequestCollector($this->app->make(Request::class));
+        });
+        $this->app->singleton(QueryCollector::class, function () {
+            return new QueryCollector($this->app['db']);
+        });
+        $this->app->singleton(MessageCollector::class, function () {
+            return new MessageCollector();
+        });
+        $this->app->singleton(ExceptionCollector::class, function () {
+            return new ExceptionCollector();
+        });
+        $this->app->singleton(LarDebug::class, function ($app) {
+            return new LarDebug($app->make(Server::class),$app);
+        });
+        $this->app->singleton('lardebug.commands.serve', function ($app) {
+            return new StartDebugServer(__DIR__, config('lardebug.server.host'), config('lardebug.server.port'));
+        });
+        $this->commands(['lardebug.commands.serve']);
+        $this->mergeConfigFrom($this->getConfigPath()."/". $this->getConfigFileName(), 'lardebug');
+        $this->publishes([
+            $this->getConfigPath()."/". $this->getConfigFileName() => \config_path('/lardebug.php'),
+        ], 'lardebug-configs');
+        $this->app->singleton(Server::class, function () {
+            return new Server(config('lardebug.server.host'), config('lardebug.server.port'));
+        });
+    
+        $this->app->singleton(ServerConfigManager::class, function ($app) {
+            return new ServerConfigManager(\config('lardebug'), $this->getConfigPath());
+        });
+
+        $this->app->singleton(Console::class, function ($app) {
+            return new Console($app->make(Server::class));
+        });
     }
   
     /**
@@ -42,48 +76,18 @@ class ServiceProvider extends Provider
      */
     public function boot()
     {
-        $this->app->make(\LarDebug::class)->bootstrap();
+      
+        $larDebug = $this->app->make(LarDebug::class);
+        $larDebug->addCollector('route',$this->app->make(RouteCollector::class));
+        $larDebug->addCollector('request',$this->app->make(RequestCollector::class));
+        $larDebug->addCollector('query',$this->app->make(QueryCollector::class));
+        $larDebug->addCollector('message',$this->app->make(MessageCollector::class));
+        $larDebug->addCollector('exceptions',$this->app->make(ExceptionCollector::class));
+       
+        $queueEventHandler = new QueueEventHandler($this->app->make(Console::class), $this->app['events']);
+        $queueEventHandler->listen();
     }
-    private function registerQueueHandler()
-    {
-        $this->app->singleton(QueueEventHandler::class, function ($app) {
-            return new QueueEventHandler($this->app->make(Server::class),$this->app['events']);
-        });
-    }
-    private function registerServerConfigManager()
-    {
-        $this->app->singleton(ServerConfigManager::class, function ($app) {
-            return new ServerConfigManager(\config('lardebug'), $this->getConfigPath());
-        });
-    }
-    private function registerCommands()
-    {
-        $this->app->singleton('lardebug.commands.serve', function ($app) {
-            return new StartDebugServer(__DIR__, config('lardebug.server.host'), config('lardebug.server.port'));
-        });
-        $this->commands(['lardebug.commands.serve']);
-    }
-    private function registerLarDebug()
-    {
-        $this->app->singleton(\LarDebug::class, function () {
-            return new LarDebug(
-                $this->getCollectors(),
-            );
-        });
-    }
-    private function registerServer()
-    {
-        $this->app->singleton(Server::class, function () {
-            return new Server(config('lardebug.server.host'), config('lardebug.server.port'));
-        });
-    }
-    private function registerConfig()
-    {
-        $this->mergeConfigFrom($this->getConfigPath()."/". $this->getConfigFileName(), 'lardebug');
-        $this->publishes([
-            $this->getConfigPath()."/". $this->getConfigFileName() => \config_path('/lardebug.php'),
-        ], 'lardebug-configs');
-    }
+   
     private function getConfigPath()
     {
         return __DIR__ . '/../config';
@@ -92,18 +96,5 @@ class ServiceProvider extends Provider
     {
         return '/lardebug.php';
     }
-    private function getCollectors()
-    {
-        $collectors = [];
-        $collectors = array_merge($collectors, ['route' => new RouteCollector($this->app->make(Router::class))]);
-        $collectors = array_merge($collectors, ['request' => new RequestCollector($this->app->make(Request::class))]);
-        $collectors = array_merge($collectors, ['query' => new QueryCollector($this->app['db'])]);
-        $collectors = array_merge($collectors, ['message' => new MessageCollector()]);
-        $collectors = array_merge($collectors, ['exceptions' => new ExceptionCollector()]);
-        return $collectors;
-    }
-    private function registerMiddleware()
-    {
-        $this->app->make(\Illuminate\Contracts\Http\Kernel::class)->pushMiddleware(\LarDebug\Middleware::class);
-    }
+    
 }
