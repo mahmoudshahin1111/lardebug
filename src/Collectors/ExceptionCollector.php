@@ -26,7 +26,7 @@ class ExceptionCollector{
      * @param Exception|Error $e
      * @return void
      */
-    public function addException($e){
+    public function add($e){
        array_push($this->exceptions,[
          'message'=>$e->getMessage(),
          'code'=>$e->getCode(),

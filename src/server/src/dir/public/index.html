@@ -19,7 +19,7 @@
             margin: 0;
             padding: 0;
             font-size: 14px;
-            font-weight: 400;
+            font-weight: bolder;
         }
 
 
@@ -167,7 +167,7 @@
             </div>
         </div>
         <div class="row">
-            <form class="col-12 border border-success  d-flex flex-lg-row flex-column gap-2">
+            <form class="col-12 border border-success  d-flex flex-lg-row flex-column gap-2 p-2">
                 <fieldset class="d-flex flex-row justify-content-center align-items-center gap-1">
                     <label for="collection-select">Select Request</label>
                     <select name="" id="collection-select" class="la-collection-select" v-model="collection"
@@ -189,7 +189,7 @@
             
             <div v-if="collection" class="row">
                 <div class="la-exceptions col-12">
-                    <h1 class="la-title">Exceptions</h1>
+                    <h1 class="la-title">Exception</h1>
     
                     <div v-for="exception in collection.exceptions">
                         <div class="la-exception">

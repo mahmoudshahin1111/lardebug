@@ -21,7 +21,7 @@ class QueryCollector implements ICollector{
         return $this->queries;
     }
    
-    public function addQuery($sql,$bindings,$time){
+    public function add($sql,$bindings,$time){
        array_push( $this->queries,[
         'sql'=>app(QueryFormatter::class)->format($sql,$bindings),
         'time'=>$time,

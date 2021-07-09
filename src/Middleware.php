@@ -22,7 +22,7 @@ class Middleware
         $response =  $next($request);
         if (isset($response->exception)) {
             $exceptionCollector = app(ExceptionCollector::class);
-            $exceptionCollector->addException($response->exception);
+            $exceptionCollector->add($response->exception);
         }
       
         $larDebug->sendCollectToServer();

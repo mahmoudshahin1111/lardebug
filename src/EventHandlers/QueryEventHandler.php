@@ -11,6 +11,6 @@ class QueryEventHandler{
 
     public function handle($event){
        // if class executed not from console add event to collectors otherwise send to console
-       app(QueryCollector::class)->addQuery($event->sql,$event->bindings,$event->time);
+       app(QueryCollector::class)->add($event->sql,$event->bindings,$event->time);
     }
 }
