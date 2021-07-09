@@ -28,6 +28,7 @@ class ExceptionCollector{
      */
     public function add($e){
        array_push($this->exceptions,[
+         'exceptionClass'=>get_class($e),
          'message'=>$e->getMessage(),
          'code'=>$e->getCode(),
          'file'=>$e->getFile(),

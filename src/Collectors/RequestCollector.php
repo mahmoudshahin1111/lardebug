@@ -4,13 +4,17 @@ namespace LarDebug\Collectors;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-class RequestCollector implements ICollector{
+
+class RequestCollector implements ICollector
+{
     protected $request;
     protected $data = [];
-    public function __construct(Request $request){
+    public function __construct(Request $request)
+    {
         $this->request = $request;
     }
-    public function collect(){
+    public function collect()
+    {
         $data = [
             'id'=>$this->generateRequestId(),
             'method'=>$this->request->method(),
@@ -18,34 +22,38 @@ class RequestCollector implements ICollector{
             'auth'=>$this->isAuthorized(),
             'ajax'=>$this->isAjax()
         ];
-        if(!empty($this->request->input('*'))){
-           $data =  array_merge($data,['inputs'=>$this->request->toArray()]);
+        if (!empty($this->request->input('*'))) {
+            $data =  array_merge($data, ['inputs'=>$this->request->toArray()]);
         }
-        if($this->request->hasFile('*')){
-            $data =  array_merge($data,[ 'files'=>$this->collectUploadedFilesInformation()]);
+        if ($this->request->hasFile('*')) {
+            $data =  array_merge($data, [ 'files'=>$this->collectUploadedFilesInformation()]);
         }
-        if(!empty($this->request->route()->gatherMiddleware())){
-            $data =  array_merge($data,[ 'middleware'=>$this->request->route()->gatherMiddleware()]);
+        $route = $this->request->route();
+        if (!empty($route) && !empty($route->gatherMiddleware())) {
+            $data =  array_merge($data, [ 'middleware'=>$route->gatherMiddleware()]);
         }
         return $data;
-        
     }
 
-    protected function isAjax(){
+    protected function isAjax()
+    {
         $isXMLRequest = $this->request->isXmlHttpRequest() || $this->request->headers->get('X-Livewire');
         $acceptable = $this->request->getAcceptableContentTypes();
         return (isset($acceptable[0]) && $acceptable[0] == 'application/json');
     }
-    protected function isAuthorized(){
+    protected function isAuthorized()
+    {
         return isset($this->request->user)?true:false;
     }
-    protected function generateRequestId(){
+    protected function generateRequestId()
+    {
         return round(\microtime(true)* 1000)."_".Str::random(10);
     }
-    public function collectUploadedFilesInformation(){
+    public function collectUploadedFilesInformation()
+    {
         $files = [];
-        foreach($this->request->files as $file){
-            array_push($files,[
+        foreach ($this->request->files as $file) {
+            array_push($files, [
                 'name'=>$file->getClientOriginalName(),
                 
             ]);

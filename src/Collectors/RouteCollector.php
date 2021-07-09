@@ -19,17 +19,13 @@ class RouteCollector implements ICollector{
         return $this->collectCurrentRoute();
     }
     protected function collectCurrentRoute(){
-        return $this->getRouteInfo($this->router->getCurrentRoute());
-    }
-    protected function collectRoutes(){
-        $routes = [];
-        foreach($this->router->getRoutes() as $route){
-            array_push($routes,$this->getRouteInfo($route));
+        if($this->router->getCurrentRoute()){
+            return $this->getRouteInfo($this->router->getCurrentRoute());
         }
-        return $routes;
+        return null;
     }
+  
     protected function getRouteInfo($route){
-        // dd($this->router);
         return [
             'prefix'=>$route->getPrefix(),
             'uri'=>$route->uri(),
@@ -39,5 +35,12 @@ class RouteCollector implements ICollector{
             'controllerMethod'=>$route->getActionMethod(),
             'middleware'=>$route->gatherMiddleware(),
         ];
+    }
+    protected function collectRoutes(){
+        $routes = [];
+        foreach($this->router->getRoutes() as $route){
+            array_push($routes,$this->getRouteInfo($route));
+        }
+        return $routes;
     }
 }

@@ -81,8 +81,4 @@ class LarDebug
         ]);
     }
   
-    public function getCollector($key)
-    {
-        return $this->collectors[$key];
-    }
 }

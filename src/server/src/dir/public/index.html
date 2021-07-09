@@ -193,6 +193,7 @@
     
                     <div v-for="exception in collection.exceptions">
                         <div class="la-exception">
+                            <div class="la-exceptionClass">Exception Class : {{exception.exceptionClass}}</div>
                             <div class="la-file">File:{{exception.file}}</div>
                             <div class="la-message">Message:{{exception.message}}</div>
                             <div class="la-code">Code:{{exception.code}}</div>
