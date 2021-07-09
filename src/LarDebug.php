@@ -64,10 +64,6 @@ class LarDebug
     {
         $this->collectors = array_merge($this->collectors, [$key=>$collector]);
     }
-    public function addMessage($body)
-    {
-        $this->collectors['message']->addMessage($body);
-    }
     public function consoleLog($body)
     {
         $message= new ConsoleMessage($body);

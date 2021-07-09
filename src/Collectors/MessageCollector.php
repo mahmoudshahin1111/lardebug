@@ -14,17 +14,22 @@ class MessageCollector implements ICollector
     {
 
     }
-    public function addMessage($body)
+    /**
+     * Add to collect
+     *
+     * @param string $level
+     * @param string $message
+     * @param array $context
+     * @return void
+     */
+    public function add($level,$message,$context)
     {
-        array_push($this->messages, $this->buildMessageBody($body));
-    }
-    public function buildMessageBody($body)
-    {
-        return [
+        array_push($this->messages,[
             'id' => \uniqid('message_'),
+            'level'=>$level,
             'time' => \microtime(true) * 1000,
-            'body' => $body,
-        ];
+            'body' => $message,
+        ]);
     }
 
     public function collect()
