@@ -29,6 +29,7 @@ class RouteCollector implements ICollector{
         return $routes;
     }
     protected function getRouteInfo($route){
+        // dd($this->router);
         return [
             'prefix'=>$route->getPrefix(),
             'uri'=>$route->uri(),

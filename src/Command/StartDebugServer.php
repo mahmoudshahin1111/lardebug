@@ -61,7 +61,7 @@ class StartDebugServer extends Command
     }
     private function printServerStartedMessage()
     {
-        print("server listen on " . $this->getCommandArgs());
+        print("server listen on " . $this->getHost().":".$this->getPort());
     }
     private function getCommandArgs()
     {

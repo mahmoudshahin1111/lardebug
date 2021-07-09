@@ -22,15 +22,8 @@
             font-weight: 400;
         }
 
-        *::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-            background: white;
-        }
 
-        *::-webkit-scrollbar-thumb {
-            color: rgb(35, 218, 65);
-        }
+
 
         .la-app {
             background-color: black;
@@ -51,7 +44,11 @@
 
         .la-collection-select {
             max-width: 100vw;
-            width: 200px;
+            width: 400px;
+            height: 30px;
+            color: black;
+            font-size: 1.2em;
+            font-weight: bolder;
         }
 
         .la-routes {
@@ -133,20 +130,24 @@
             top: 0;
             background-color: black;
         }
-        .la-exceptions{
+
+        .la-exceptions {
             border: 1px solid white;
             color: rgb(218, 35, 35);
             height: 200px;
             overflow-y: auto;
         }
-        .la-exceptions .la-title{
+
+        .la-exceptions .la-title {
             position: sticky;
             top: 0;
             background-color: black;
         }
-        .la-exceptions .la-exception{
+
+        .la-exceptions .la-exception {
             color: white;
         }
+
         .text-green {
             color: rgb(35, 218, 65);
         }
@@ -155,7 +156,16 @@
 
 <body>
     <div id="app" class="la-app">
-
+        <div class="row">
+            <div class="la-console-log col-12">
+                <h1 class="la-title">Console</h1>
+                <ul class="p-0 m-0 list" v-if="console">
+                    <li v-for="logMessage,index in console" class="list-item">
+                        <p>{{index}} # {{toData(logMessage.time)}} - {{logMessage.body}}</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <div class="row">
             <form class="col-12 border border-success  d-flex flex-lg-row flex-column gap-2">
                 <fieldset class="d-flex flex-row justify-content-center align-items-center gap-1">
@@ -175,138 +185,132 @@
             </form>
 
         </div>
-        <div v-if="collection" class="row">
-            <div class="la-exceptions col-12">
-                <h1 class="la-title">Exceptions</h1>
-             
+        <div class="d-flex flex-column p-5">
+            
+            <div v-if="collection" class="row">
+                <div class="la-exceptions col-12">
+                    <h1 class="la-title">Exceptions</h1>
+    
                     <div v-for="exception in collection.exceptions">
                         <div class="la-exception">
                             <div class="la-file">File:{{exception.file}}</div>
-                                <div class="la-message">Message:{{exception.message}}</div>
-                                <div class="la-code">Code:{{exception.code}}</div>
-                                <div class="la-track">Track:{{exception.trackString}}</div>
-                      
+                            <div class="la-message">Message:{{exception.message}}</div>
+                            <div class="la-code">Code:{{exception.code}}</div>
+                            <div class="la-track">Track:{{exception.trackString}}</div>
+    
                         </div>
                     </div>
-                
-            </div>
-            <div class="la-routes col-12 col-lg-6">
-                <h1 class="la-title">Route</h1>
-                <table class="col-12 table table-bordered text-green">
-                    <thead>
-                        <th scope="col">prefix</th>
-                        <th scope="col">uri</th>
-                        <th scope="col">name</th>
-                        <th scope="col">method</th>
-                        <th scope="col">controller</th>
-                        <th scope="col">controllerMethod</th>
-                        <th scope="col">middleware</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">
-                                {{collection.route?.prefix}}
-                            </th>
-                            <td>
-                                {{collection.route?.uri}}
-                            </td>
-                            <td>
-                                {{collection.route?.name}}
-                            </td>
-                            <td>
-                                {{collection.route?.method}}
-                            </td>
-                            <td>
-                                {{collection.route?.controller}}
-                            </td>
-                            <td>
-                                {{collection.route?.controllerMethod}}
-                            </td>
-                            <td>
-                                {{collection.route?.middleware}}
-                            </td>
-
-                        </tr>
-                    </tbody>
-
-                </table>
-            </div>
-            <div class="la-request col-12 col-lg-6">
-                <h1 class="la-title">Request</h1>
-                <p v-if="collection.request.inputs">
-                    <strong>inputs:</strong>
-                <ul v-for="value,name in collection.request.inputs">
-                    <li>
-                        <p> <strong>{{name}}:</strong>{{value}}</p>
-                    </li>
-                </ul>
-                </p>
-                <p><strong>Method:</strong>{{collection.request.method}}</p>
-                <p><strong>Url:</strong>{{collection.request.url}}</p>
-                <p v-if="collection.request.middleware">
-                    <strong>middleware:</strong>
-                <ul v-for="middleware in collection.request.middleware">
-                    <li>
-                        <p>{{middleware}}</p>
-                    </li>
-                </ul>
-                </p>
-                <p v-if="collection.request.files">
-                    <strong>Files:</strong>
-                <ul v-for="file in collection.request.files">
-                    <li>
-                        <p v-for="value,name in file"><strong>{{name}}:</strong>{{value}}</p>
-                    </li>
-                </ul>
-                </p>
-                <p><strong>authenticated:</strong>{{collection.request.auth?'yes':'no'}}</p>
-            </div>
-
-            <div class="la-query col-12 col-lg-6">
-                <h1 class="la-title">Queries</h1>
-                <table v-if="collection.queries.length > 0" class="col-12 table table-bordered text-green">
-                    <thead>
-                        <tr>
-                            <th>sql</th>
-                            <th>time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="query in collection.queries">
-                            <td>{{query.sql}}</td>
-                            <td>{{query.time}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div v-if="collection.queries.length <= 0">
-                    <p>No Queries In The Request</p>
+    
                 </div>
+                <div class="la-routes col-12 col-lg-6">
+                    <h1 class="la-title">Route</h1>
+                    <table class="col-12 table table-bordered text-green">
+                        <thead>
+                            <th scope="col">prefix</th>
+                            <th scope="col">uri</th>
+                            <th scope="col">name</th>
+                            <th scope="col">method</th>
+                            <th scope="col">controller</th>
+                            <th scope="col">controllerMethod</th>
+                            <th scope="col">middleware</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">
+                                    {{collection.route?.prefix}}
+                                </th>
+                                <td>
+                                    {{collection.route?.uri}}
+                                </td>
+                                <td>
+                                    {{collection.route?.name}}
+                                </td>
+                                <td>
+                                    {{collection.route?.method}}
+                                </td>
+                                <td>
+                                    {{collection.route?.controller}}
+                                </td>
+                                <td>
+                                    {{collection.route?.controllerMethod}}
+                                </td>
+                                <td>
+                                    {{collection.route?.middleware}}
+                                </td>
+    
+                            </tr>
+                        </tbody>
+    
+                    </table>
+                </div>
+                <div class="la-request col-12 col-lg-6">
+                    <h1 class="la-title">Request</h1>
+                    <p v-if="collection.request.inputs">
+                        <strong>inputs:</strong>
+                    <ul v-for="value,name in collection.request.inputs">
+                        <li>
+                            <p> <strong>{{name}}:</strong>{{value}}</p>
+                        </li>
+                    </ul>
+                    </p>
+                    <p><strong>Method:</strong>{{collection.request.method}}</p>
+                    <p><strong>Url:</strong>{{collection.request.url}}</p>
+                    <p v-if="collection.request.middleware">
+                        <strong>middleware:</strong>
+                    <ul v-for="middleware in collection.request.middleware">
+                        <li>
+                            <p>{{middleware}}</p>
+                        </li>
+                    </ul>
+                    </p>
+                    <p v-if="collection.request.files">
+                        <strong>Files:</strong>
+                    <ul v-for="file in collection.request.files">
+                        <li>
+                            <p v-for="value,name in file"><strong>{{name}}:</strong>{{value}}</p>
+                        </li>
+                    </ul>
+                    </p>
+                    <p><strong>authenticated:</strong>{{collection.request.auth?'yes':'no'}}</p>
+                </div>
+    
+                <div class="la-query col-12 col-lg-6">
+                    <h1 class="la-title">Queries</h1>
+                    <table v-if="collection.queries.length > 0" class="col-12 table table-bordered text-green">
+                        <thead>
+                            <tr>
+                                <th>sql</th>
+                                <th>time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="query in collection.queries">
+                                <td>{{query.sql}}</td>
+                                <td>{{query.time}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div v-if="collection.queries.length <= 0">
+                        <p>No Queries In The Request</p>
+                    </div>
+                </div>
+                <div class="la-request-debug   col-12 col-lg-6">
+                    <h1>Messages</h1>
+                    <ul class="p-0 m-0 list" v-if="collection.messages">
+                        <li v-for="message in collection.messages" class="list-item">
+                            <p>{{message.body}}</p>
+                        </li>
+                    </ul>
+                    <p v-if="!collection.messages">No Messages</p>
+                </div>
+    
             </div>
-            <div class="la-request-debug   col-12 col-lg-6">
-                <h1>Messages</h1>
-                <ul class="p-0 m-0 list" v-if="collection.messages">
-                    <li v-for="message in collection.messages" class="list-item">
-                        <p>{{message.body}}</p>
-                    </li>
-                </ul>
-                <p v-if="!collection.messages">No Messages</p>
+    
+            <div v-if="!collection">
+                Please Select Request To Show It's information
             </div>
-
         </div>
 
-        <div v-if="!collection">
-            No Requests
-        </div>
-        <div class="row">
-            <div class="la-console-log col-12">
-                <h1 class="la-title">Console</h1>
-                <ul class="p-0 m-0 list" v-if="console">
-                    <li v-for="logMessage,index in console" class="list-item">
-                        <p>{{index}} # {{toData(logMessage.time)}} - {{logMessage.body}}</p>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
