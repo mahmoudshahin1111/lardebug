@@ -9,6 +9,7 @@ use LarDebug\ServerConfigManager;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Queue\Events\JobFailed;
+use Illuminate\Queue\Events\JobQueued;
 use LarDebug\Command\StartDebugServer;
 use LarDebug\Collectors\QueryCollector;
 use LarDebug\Collectors\RouteCollector;
@@ -17,11 +18,14 @@ use LarDebug\Collectors\MessageCollector;
 use LarDebug\Collectors\RequestCollector;
 use Illuminate\Queue\Events\JobProcessing;
 use LarDebug\Collectors\ExceptionCollector;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Application as App;
+use LarDebug\EventHandlers\QueryEventHandler;
 use LarDebug\EventHandlers\QueueEventHandler;
 use LarDebug\Middleware as LarDebugMiddleware;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use LarDebug\EventHandlers\JobFailedEventHandler;
+use LarDebug\EventHandlers\JobQueuedEventHandler;
 use Illuminate\Support\ServiceProvider as Provider;
 use LarDebug\EventHandlers\JobProcessedEventHandler;
 use LarDebug\EventHandlers\JobProcessingEventHandler;
@@ -95,6 +99,8 @@ class ServiceProvider extends Provider
         $this->app['events']->listen(JobExceptionOccurred::class, [JobExceptionOccurredEventHandler::class,'handle']);
         $this->app['events']->listen(JobProcessing::class, [JobProcessingEventHandler::class,'handle']);
         $this->app['events']->listen(JobProcessed::class, [JobProcessedEventHandler::class,'handle']);
+        $this->app['events']->listen(JobQueued::class, [JobQueuedEventHandler::class,'handle']);
+        $this->app['events']->listen(QueryExecuted::class,[QueryEventHandler::class,'handle']);
         // dd($this->app['events']);
     }
    

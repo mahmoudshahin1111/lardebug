@@ -1,9 +1,12 @@
 <?php
 
 namespace LarDebug\Collectors;
-use LarDebug\Server;
+use Error;
+use Exception;
 use Throwable;
+use LarDebug\Server;
 use \DebugBar\StandardDebugBar;
+
 class ExceptionCollector{
   /**
      * array of events triggered
@@ -17,7 +20,13 @@ class ExceptionCollector{
     public function collect(){
         return $this->exceptions;
     }
-    public function addException(\Exception $e){
+    /**
+     * Undocumented function
+     *
+     * @param Exception|Error $e
+     * @return void
+     */
+    public function addException($e){
        array_push($this->exceptions,[
          'message'=>$e->getMessage(),
          'code'=>$e->getCode(),
