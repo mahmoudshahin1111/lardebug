@@ -6,7 +6,7 @@
 
 <!-- [![Latest Unstable Version](http://poser.pugx.org/lardebug/lardebug/v/unstable)](https://packagist.org/packages/lardebug/lardebug)  -->
 
-## Installation on laravel
+## Installation
 
 You can install the package through Composer.
 
@@ -30,11 +30,10 @@ in file `config\app.php` add this line to providers
 
 ### Terminal
 ```bash
-    php artisan lardebug:serve
+php artisan lardebug:serve
 ```
 ### In Browser
 open http://localhost:3000
-
 ## Customize
 ```bash
 php artisan vendor:publish --provider="LarDebug\ServiceProvider"
