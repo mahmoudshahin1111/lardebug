@@ -1,5 +1,5 @@
 {
-    "name": "mahmoudshahin/lardebug",
+    "name": "lardebug/lardebug",
     "type": "library",
     "description": "",
     "keywords": ["lardebug", "laravel debugger"],
