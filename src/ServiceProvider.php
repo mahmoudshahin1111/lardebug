@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Queue;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Queue\Events\JobQueued;
 use LarDebug\Command\StartDebugServer;
+use LarDebug\Formatter\QueryFormatter;
 use LarDebug\Collectors\QueryCollector;
 use LarDebug\Collectors\RouteCollector;
 use Illuminate\Queue\Events\JobProcessed;
@@ -21,7 +22,6 @@ use LarDebug\Collectors\ExceptionCollector;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Application as App;
 use LarDebug\EventHandlers\QueryEventHandler;
-use LarDebug\EventHandlers\QueueEventHandler;
 use LarDebug\Middleware as LarDebugMiddleware;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use LarDebug\EventHandlers\JobFailedEventHandler;
@@ -56,6 +56,9 @@ class ServiceProvider extends Provider
         });
         $this->app->singleton(ExceptionCollector::class, function () {
             return new ExceptionCollector();
+        });
+        $this->app->singleton(QueryFormatter::class, function () {
+            return new QueryFormatter();
         });
         $this->app->singleton(LarDebug::class, function ($app) {
             return new LarDebug($app->make(Server::class), $app);
@@ -100,7 +103,7 @@ class ServiceProvider extends Provider
         $this->app['events']->listen(JobProcessing::class, [JobProcessingEventHandler::class,'handle']);
         $this->app['events']->listen(JobProcessed::class, [JobProcessedEventHandler::class,'handle']);
         $this->app['events']->listen(JobQueued::class, [JobQueuedEventHandler::class,'handle']);
-        $this->app['events']->listen(QueryExecuted::class,[QueryEventHandler::class,'handle']);
+        $this->app['events']->listen(QueryExecuted::class, [QueryEventHandler::class,'handle']);
         // dd($this->app['events']);
     }
    

@@ -1,6 +1,7 @@
 <?php
 namespace LarDebug\Collectors;
 use Illuminate\Support\Facades\DB;
+use LarDebug\Formatter\QueryFormatter;
 
 
 class QueryCollector implements ICollector{
@@ -48,15 +49,7 @@ class QueryCollector implements ICollector{
         }
     }
     protected function addBindingsToQuery($query,$bindings){
-        $fullQuery = '';
-        $queryParts = explode('?',$query);
-        for($i=0;$i<count($queryParts);$i++){
-            $fullQuery .= $queryParts[$i];
-            if( isset($bindings[$i])){
-                $fullQuery.= $bindings[$i];
-            }
-        }
-        return $fullQuery;
+        return app(QueryFormatter::class)->format($query,$bindings);
     }
     public function listenToQueryExecutedEvent($callback){
         $this->onQueryExecutedEvent = $callback;
