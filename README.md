@@ -1,12 +1,19 @@
-
 #LarDebug
 
+[![Latest Stable Version](http://poser.pugx.org/lardebug/lardebug/v)](https://packagist.org/packages/lardebug/lardebug) [![Total Downloads](http://poser.pugx.org/lardebug/lardebug/downloads)](https://packagist.org/packages/lardebug/lardebug) [![Latest Unstable Version](http://poser.pugx.org/lardebug/lardebug/v/unstable)](https://packagist.org/packages/lardebug/lardebug) [![License](http://poser.pugx.org/lardebug/lardebug/license)](https://packagist.org/packages/lardebug/lardebug)
 
-[![Software License](https://poser.pugx.org/lardebug/lardebug/license.svg)](LICENSE.md)
-[![Latest Version on Packagist](https://poser.pugx.org/lardebug/lardebug/v/stable.svg)](https://packagist.org/packages/lardebug/lardebug)
-[![Build Status](https://github.com/lardebug/lardebug/workflows/tests/badge.svg)](https://github.com/lardebug/lardebug/actions)
-[![Total Downloads](https://poser.pugx.org/lardebug/lardebug/d/total.svg)](https://packagist.org/packages/lardebug/lardebug)
+## Installation on laravel
 
-laravel debugging tool
+You can install the package through Composer.
 
+```bash
+composer require lardebug/lardebug
+```
 
+Then publish the config and migration file of the package using artisan.
+
+```bash
+php artisan vendor:publish --provider="LarDebug\ServiceProvider"
+```
+
+And adjust config file (`config/lardebug.php`) with your desired settings.
