@@ -49,7 +49,7 @@ class ServiceProvider extends Provider
             return new RequestCollector($this->app->make(Request::class));
         });
         $this->app->singleton(QueryCollector::class, function () {
-            return new QueryCollector($this->app['db']);
+            return new QueryCollector();
         });
         $this->app->singleton(MessageCollector::class, function () {
             return new MessageCollector();
