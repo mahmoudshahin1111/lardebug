@@ -2,22 +2,30 @@
 
 namespace LarDebug;
 
-use Illuminate\Foundation\Application as App;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Router;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\ServiceProvider as Provider;
-use LarDebug\Collectors\MessageCollector;
-use LarDebug\Collectors\QueryCollector;
-use LarDebug\Collectors\RequestCollector;
-use LarDebug\Collectors\RouteCollector;
-use LarDebug\Collectors\ExceptionCollector;
-use LarDebug\Command\StartDebugServer;
-use LarDebug\ServerConfigManager;
-use Illuminate\Support\Facades\Queue;
-use LarDebug\EventHandlers\QueueEventHandler;
 use \LarDebug\Console\Console;
+use Illuminate\Routing\Router;
+use LarDebug\ServerConfigManager;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Queue\Events\JobFailed;
+use LarDebug\Command\StartDebugServer;
+use LarDebug\Collectors\QueryCollector;
+use LarDebug\Collectors\RouteCollector;
+use Illuminate\Queue\Events\JobProcessed;
+use LarDebug\Collectors\MessageCollector;
+use LarDebug\Collectors\RequestCollector;
+use Illuminate\Queue\Events\JobProcessing;
+use LarDebug\Collectors\ExceptionCollector;
+use Illuminate\Foundation\Application as App;
+use LarDebug\EventHandlers\QueueEventHandler;
 use LarDebug\Middleware as LarDebugMiddleware;
+use Illuminate\Queue\Events\JobExceptionOccurred;
+use LarDebug\EventHandlers\JobFailedEventHandler;
+use Illuminate\Support\ServiceProvider as Provider;
+use LarDebug\EventHandlers\JobProcessedEventHandler;
+use LarDebug\EventHandlers\JobProcessingEventHandler;
+use LarDebug\EventHandlers\JobExceptionOccurredEventHandler;
 
 class ServiceProvider extends Provider
 {
@@ -46,7 +54,7 @@ class ServiceProvider extends Provider
             return new ExceptionCollector();
         });
         $this->app->singleton(LarDebug::class, function ($app) {
-            return new LarDebug($app->make(Server::class),$app);
+            return new LarDebug($app->make(Server::class), $app);
         });
         $this->app->singleton('lardebug.commands.serve', function ($app) {
             return new StartDebugServer(__DIR__, config('lardebug.server.host'), config('lardebug.server.port'));
@@ -76,16 +84,18 @@ class ServiceProvider extends Provider
      */
     public function boot()
     {
-      
         $larDebug = $this->app->make(LarDebug::class);
-        $larDebug->addCollector('route',$this->app->make(RouteCollector::class));
-        $larDebug->addCollector('request',$this->app->make(RequestCollector::class));
-        $larDebug->addCollector('query',$this->app->make(QueryCollector::class));
-        $larDebug->addCollector('message',$this->app->make(MessageCollector::class));
-        $larDebug->addCollector('exceptions',$this->app->make(ExceptionCollector::class));
-       
-        $queueEventHandler = new QueueEventHandler($this->app->make(Console::class), $this->app['events']);
-        $queueEventHandler->listen();
+        $larDebug->addCollector('route', $this->app->make(RouteCollector::class));
+        $larDebug->addCollector('request', $this->app->make(RequestCollector::class));
+        $larDebug->addCollector('query', $this->app->make(QueryCollector::class));
+        $larDebug->addCollector('message', $this->app->make(MessageCollector::class));
+        $larDebug->addCollector('exceptions', $this->app->make(ExceptionCollector::class));
+
+        $this->app['events']->listen(JobFailed::class, [JobFailedEventHandler::class,'handle']);
+        $this->app['events']->listen(JobExceptionOccurred::class, [JobExceptionOccurredEventHandler::class,'handle']);
+        $this->app['events']->listen(JobProcessing::class, [JobProcessingEventHandler::class,'handle']);
+        $this->app['events']->listen(JobProcessed::class, [JobProcessedEventHandler::class,'handle']);
+        // dd($this->app['events']);
     }
    
     private function getConfigPath()
@@ -96,5 +106,4 @@ class ServiceProvider extends Provider
     {
         return '/lardebug.php';
     }
-    
 }
