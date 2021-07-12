@@ -3,13 +3,13 @@ import * as cors from "cors";
 import * as http from "http";
 import * as socketIo from "socket.io";
 import * as path from "path";
-import * as childProcess from 'child_process';
-import * as fs from 'fs';
+
 const app = express.default();
 const server = http.createServer(app);
 const io = new socketIo.Server(server);
 
-app.use(express.json());
+
+app.use(express.json({limit:'500mb'}));
 app.use(cors.default({ origin: true }));
 app.use(express.static("public"));
 app.get("*", function (req: express.Request, res: express.Response) {

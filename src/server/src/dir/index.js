@@ -27,7 +27,7 @@ var path = __importStar(require("path"));
 var app = express.default();
 var server = http.createServer(app);
 var io = new socketIo.Server(server);
-app.use(express.json());
+app.use(express.json({ limit: '500mb' }));
 app.use(cors.default({ origin: true }));
 app.use(express.static("public"));
 app.get("*", function (req, res) {

@@ -133,19 +133,36 @@
 
         .la-exceptions {
             border: 1px solid white;
-            color: rgb(218, 35, 35);
+
             height: 200px;
             overflow-y: auto;
         }
 
-        .la-exceptions .la-title {
+        .la-exceptions .la-title-container {
             position: sticky;
             top: 0;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
             background-color: black;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .la-exceptions .la-title-container .la-title {
+            color: rgb(218, 35, 35);
+        }
+
+        .la-exceptions .la-title-container .la-showExceptionBtn {
+            color: black;
+            font-weight: bolder;
+            font-size: 1.2em;
+            height: 80%;
         }
 
         .la-exceptions .la-exception {
             color: white;
+            line-height: 2em;
         }
 
         .text-green {
@@ -186,22 +203,25 @@
 
         </div>
         <div class="d-flex flex-column p-5">
-            
+
             <div v-if="collection" class="row">
                 <div class="la-exceptions col-12">
-                    <h1 class="la-title">Exception</h1>
-    
+                    <div class="la-title-container">
+                        <h1 class="la-title">Exception</h1>
+                        <button type="button" class="la-showExceptionBtn"
+                            v-on:click="openExceptionInNewTab(collection.exceptions[0])">Screen</button>
+                    </div>
                     <div v-for="exception in collection.exceptions">
                         <div class="la-exception">
                             <div class="la-exceptionClass">Exception Class : {{exception.exceptionClass}}</div>
-                            <div class="la-file">File:{{exception.file}}</div>
-                            <div class="la-message">Message:{{exception.message}}</div>
-                            <div class="la-code">Code:{{exception.code}}</div>
-                            <div class="la-track">Track:{{exception.trackString}}</div>
-    
+                            <div class="la-file"><span>File:</span>{{exception.file}}</div>
+                            <div class="la-message"><span>Message:</span>{{exception.message}}</div>
+                            <div class="la-code"><span>Code:</span>{{exception.code}}</div>
+                            <div class="la-track"><span>Track:</span>{{exception.trackString}}</div>
+
                         </div>
                     </div>
-    
+
                 </div>
                 <div class="la-routes col-12 col-lg-6">
                     <h1 class="la-title">Route</h1>
@@ -238,10 +258,10 @@
                                 <td>
                                     {{collection.route?.middleware}}
                                 </td>
-    
+
                             </tr>
                         </tbody>
-    
+
                     </table>
                 </div>
                 <div class="la-request col-12 col-lg-6">
@@ -274,7 +294,7 @@
                     </p>
                     <p><strong>authenticated:</strong>{{collection.request.auth?'yes':'no'}}</p>
                 </div>
-    
+
                 <div class="la-query col-12 col-lg-6">
                     <h1 class="la-title">Queries</h1>
                     <table v-if="collection.queries.length > 0" class="col-12 table table-bordered text-green">
@@ -304,9 +324,9 @@
                     </ul>
                     <p v-if="!collection.messages">No Messages</p>
                 </div>
-    
+
             </div>
-    
+
             <div v-if="!collection">
                 Please Select Request To Show It's information
             </div>
@@ -331,11 +351,15 @@
                     collection: null,
                     collections: [],
                     console: [],
-                    selectLastRequestEnabled: false,
+                    selectLastRequestEnabled: true,
                 },
                 methods: {
                     toData: function (milliseconds) {
                         return (new Date(milliseconds)).toLocaleString();
+                    },
+                    openExceptionInNewTab(exception) {
+                        const newWindow = window.open();
+                        newWindow.document.write(exception.exceptionHtml);
                     }
                 },
                 mounted: function () {
