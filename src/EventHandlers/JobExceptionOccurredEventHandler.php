@@ -4,6 +4,7 @@ namespace LarDebug\EventHandlers;
 
 use LarDebug\Console\Console;
 use LarDebug\Console\Message;
+use Illuminate\Foundation\Exceptions\Handler;
 
 
 class JobExceptionOccurredEventHandler{
@@ -14,7 +15,8 @@ class JobExceptionOccurredEventHandler{
             'type'=>'event/queue/jobExceptionOccurred',
             'jobName'=>$event->job->resolveName(),
             'exceptionMessage'=>$event->exception->getMessage(),
-            'trackString'=>$event->exception->getTraceAsString()
+            'trackString'=>$event->exception->getTraceAsString(),
+           
         ]));
     }
 }

@@ -178,7 +178,28 @@
                 <h1 class="la-title">Console</h1>
                 <ul class="p-0 m-0 list" v-if="console">
                     <li v-for="logMessage,index in console" class="list-item">
-                        <p>{{index}} # {{toData(logMessage.time)}} - {{logMessage.body}}</p>
+
+                        <button v-if="isConsoleMessageHasException(logMessage)" class="btn text-white border border-danger" type="button"
+                            data-bs-toggle="collapse" v-bind:data-bs-target="'#messageCollapse_'+index"
+                            aria-expanded="false" v-bind:aria-controls="'messageCollapse_'+index">
+                            {{index}} # {{toData(logMessage.time)}} - {{logMessage.body}}
+                        </button>
+                        <div  v-if="isConsoleMessageHasException(logMessage)" class="collapse" v-bind:id="'messageCollapse_'+index">
+                            <div class="card card-body">
+                                <div class="card card-body">
+                                    <div>
+                                        {{logMessage.meta.exceptionMessage}}
+                                    </div>
+                                    <div>
+                                        {{logMessage.meta.trackString}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p v-if="!isConsoleMessageHasException(logMessage)">{{index}} # {{toData(logMessage.time)}} -
+                            {{logMessage.body}}</p>
+                      
                     </li>
                 </ul>
             </div>
@@ -333,6 +354,9 @@
         </div>
 
     </div>
+
+
+
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
@@ -360,6 +384,15 @@
                     openExceptionInNewTab(exception) {
                         const newWindow = window.open();
                         newWindow.document.write(exception.exceptionHtml);
+                    },
+                    isConsoleMessageHasException(consoleMessage) {
+
+                        if (
+                            consoleMessage?.meta?.exceptionMessage !== undefined &&
+                            consoleMessage?.meta?.trackString !== null) {
+                            return true;
+                        }
+                        return false;
                     }
                 },
                 mounted: function () {
