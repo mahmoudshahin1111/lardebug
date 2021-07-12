@@ -1,36 +1,36 @@
 <?php
 
-
-
 namespace LarDebug;
 
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use LarDebug\Server as LarDebugServer;
 use LarDebug\Collectors\ExceptionCollector;
+use Illuminate\Foundation\Exceptions\Handler;
 
 class Middleware
 {
     private $larDebug;
     public function handle(Request $request, Closure $next)
     {
-       
+
         $larDebug = app(LarDebug::class);
         $server = app(LarDebugServer::class);
-        
+
         $server->sendStartSignal();
-        $response =  $next($request);
+        $response = $next($request);
         if (isset($response->exception)) {
             $exceptionCollector = app(ExceptionCollector::class);
-            $exceptionCollector->add($response->exception);
+            $exceptionHandler = app(Handler::class);
+            $renderedExceptionHtml =  $exceptionHandler->render($request, $response->exception)->getContent();
+            $exceptionCollector->add($response->exception, $renderedExceptionHtml);
         }
-     
+
         $larDebug->sendCollectToServer();
-    
+
         $server->sendEndSignal();
- 
+
         return $response;
     }
     public function terminate($request, $response)

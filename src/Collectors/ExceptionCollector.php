@@ -30,7 +30,7 @@ class ExceptionCollector
      * @param Exception|Error $e
      * @return void
      */
-    public function add($e)
+    public function add($e,$renderedExceptionHtml)
     {
         array_push($this->exceptions, [
          'exceptionClass'=>get_class($e),
@@ -38,7 +38,7 @@ class ExceptionCollector
          'code'=>$e->getCode(),
          'file'=>$e->getFile(),
          'trackString'=>$e->getTraceAsString(),
-          'exceptionHtml'=>\app(Handler::class)->render(request(), $e)->getContent(),
+          'exceptionHtml'=>$renderedExceptionHtml,
        ]);
     }
 }
