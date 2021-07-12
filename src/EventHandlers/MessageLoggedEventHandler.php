@@ -10,6 +10,7 @@ class MessageLoggedEventHandler
 {
     public function handle($event)
     {
+        if($event->level === 'error') return;
         app(MessageCollector::class)->add($event->level,$event->message,$event->context);
     }
 }
