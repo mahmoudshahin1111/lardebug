@@ -29,4 +29,5 @@ jobs:
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-progress
           composer require lardebug/lardebug
+          php artisan lardebug:serve
         
