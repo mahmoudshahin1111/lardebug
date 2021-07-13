@@ -1,0 +1,29 @@
+name: Test Install
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  test-install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      COMPOSER_NO_INTERACTION: 1
+    strategy:
+      matrix:
+        php: [8.0,7.4,7.3,7.2]
+        laravel: [8.*,6.*,7.*]
+        dependency-version: [prefer-lowest,prefer-stable]
+        exclude:
+          - laravel: 8.*
+            php: 7.2
+    steps:
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-progress
