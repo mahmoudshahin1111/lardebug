@@ -67,7 +67,7 @@ class ServiceProvider extends Provider
         $this->app->singleton(LarDebug::class, function ($app) {
             return new LarDebug($app);
         });
-        $this->app->singleton(Server::class, function ($app) {
+        $this->app->singleton(StartDebugServer::class, function ($app) {
             return new StartDebugServer(__DIR__, config('lardebug.server.host'), config('lardebug.server.port'));
         });
         $this->app->singleton(Server::class, function () {
@@ -117,7 +117,7 @@ class ServiceProvider extends Provider
     }
     private function registerPublish()
     {
-        $this->commands(['lardebug.commands.serve']);
+        $this->commands([StartDebugServer::class]);
         $this->mergeConfigFrom($this->getConfigPath() . "/" . $this->getConfigFileName(), 'lardebug');
         $this->publishes([
             $this->getConfigPath() . "/" . $this->getConfigFileName() => \config_path('/lardebug.php'),

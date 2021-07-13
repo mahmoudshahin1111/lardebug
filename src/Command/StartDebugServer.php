@@ -21,7 +21,7 @@ class StartDebugServer extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Start LarDebug';
 
     /**
      * Create a new command instance.
