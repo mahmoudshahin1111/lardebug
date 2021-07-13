@@ -16,6 +16,7 @@ jobs:
       COMPOSER_NO_INTERACTION: 1
     strategy:
       matrix:
+        node: [16]
         php: [8.0,7.4,7.3,7.2]
         laravel: [8.*,6.*,7.*]
         dependency-version: [prefer-lowest,prefer-stable]
@@ -27,3 +28,5 @@ jobs:
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-progress
+          composer require lardebug/lardebug
+        
