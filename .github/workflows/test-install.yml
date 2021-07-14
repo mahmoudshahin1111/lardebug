@@ -17,17 +17,14 @@ jobs:
     strategy:
       matrix:
         node: [16]
-        php: [8.0]
-        laravel: [8.*]
-        dependency-version: [prefer-lowest,prefer-stable]
-        exclude:
-          - laravel: 8.*
-            php: 7.2
+        php: [8.0,7.4]
+        laravel: [8.*,7.*]
     steps:
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-progress
+    
+      - name: Install LarDebug
+        run: |
           composer require lardebug/lardebug
-          php artisan lardebug:serve
-        
