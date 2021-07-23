@@ -15,11 +15,11 @@
     <style>
         html,
         body {
-            font-family: 'Inconsolata', monospace;
+            font-family: sans-serif;
             margin: 0;
             padding: 0;
             font-size: 14px;
-            font-weight: bolder;
+            font-weight: normal;
         }
 
 
@@ -28,7 +28,7 @@
         .la-app {
             background-color: black;
             border: 1px solid white;
-            color: rgb(35, 218, 65);
+            color: white;
             display: flex;
             flex-direction: column;
             grid-template-columns: 1fr;
@@ -82,6 +82,7 @@
             padding: 0.25rem;
             overflow-y: auto;
             height: 200px;
+            color: white;
         }
 
         .la-query .la-title {
@@ -92,7 +93,7 @@
 
         .la-request-debug {
             border: 1px solid white;
-            color: rgb(35, 218, 65);
+            color: white;
             height: 200px;
             overflow-y: auto;
             height: 200px;
@@ -106,7 +107,7 @@
 
         .la-console-log {
             border: 1px solid white;
-            color: rgb(35, 218, 65);
+            color: white;
             height: 200px;
             overflow-y: auto;
         }
@@ -119,7 +120,7 @@
 
         .la-events {
             border: 1px solid white;
-            color: rgb(35, 218, 65);
+            color: white;
             height: 200px;
             overflow-y: auto;
 
@@ -176,30 +177,30 @@
     <div id="app" class="la-app">
         <div class="row">
             <div class="la-console-log col-12">
-                <h1 class="la-title">Console</h1>
+                <h1 class="la-title text-green">Console</h1>
                 <ul class="p-0 m-0 list" v-if="console">
                     <li v-for="logMessage,index in console" class="list-item">
 
-                        <button v-if="isConsoleMessageHasException(logMessage)" class="btn text-white border border-danger" type="button"
+                        <button v-if="isConsoleMessageHasException(logMessage.body)" class="btn text-white border border-danger" type="button"
                             data-bs-toggle="collapse" v-bind:data-bs-target="'#messageCollapse_'+index"
                             aria-expanded="false" v-bind:aria-controls="'messageCollapse_'+index">
-                            {{index}} # {{toDate(logMessage.time)}} - {{logMessage.body}}
+                            {{index}} # {{toDate(logMessage.body.time)}} - {{logMessage.body.body}}
                         </button>
                         <div  v-if="isConsoleMessageHasException(logMessage)" class="collapse" v-bind:id="'messageCollapse_'+index">
                             <div class="card card-body">
                                 <div class="card card-body">
                                     <div>
-                                        {{logMessage.meta.exceptionMessage}}
+                                        {{logMessage.body.meta.exceptionMessage}}
                                     </div>
                                     <div>
-                                        {{logMessage.meta.trackString}}
+                                        {{logMessage.body.meta.trackString}}
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <p v-if="!isConsoleMessageHasException(logMessage)">{{index}} # {{toDate(logMessage.time)}} -
-                            {{logMessage.body}}</p>
+                        <p v-if="!isConsoleMessageHasException(logMessage.body)">{{index}} # {{toDate(logMessage.body.time)}} -
+                            {{logMessage.body.body}}</p>
                       
                     </li>
                 </ul>
@@ -208,7 +209,7 @@
         <div class="row">
             <form class="col-12 border border-success  d-flex flex-lg-row flex-column gap-2 p-2">
                 <fieldset class="d-flex flex-row justify-content-center align-items-center gap-1">
-                    <label for="collection-select">Select Request</label>
+                    <label for="collection-select " class="text-green">Select Request</label>
                     <select name="" id="collection-select" class="la-collection-select" v-model="collection"
                         placeholder="choose request">
                         <option selected disabled>choose request</option>
@@ -217,7 +218,7 @@
                     </select>
                 </fieldset>
                 <fieldset class="d-flex flex-row justify-content-center align-items-center gap-1">
-                    <label for="select-last-request-enabled-checkbox">Auto Select Last Request</label>
+                    <label for="select-last-request-enabled-checkbox" class="text-green">Auto Select Last Request</label>
                     <input type="checkbox" id="select-last-request-enabled-checkbox" name="selectLastRequestEnabled"
                         v-model="selectLastRequestEnabled" checked>
                 </fieldset>
@@ -246,8 +247,8 @@
 
                 </div>
                 <div class="la-routes col-12 col-lg-6">
-                    <h1 class="la-title">Route</h1>
-                    <table class="col-12 table table-bordered text-green">
+                    <h1 class="la-title text-green">Route</h1>
+                    <table class="col-12 table table-bordered text-white">
                         <thead>
                             <th scope="col">prefix</th>
                             <th scope="col">uri</th>
@@ -287,7 +288,7 @@
                     </table>
                 </div>
                 <div class="la-request col-12 col-lg-6">
-                    <h1 class="la-title">Request</h1>
+                    <h1 class="la-title text-green">Request</h1>
                     <p v-if="collection.body.request.inputs">
                         <strong>inputs:</strong>
                     <ul v-for="value,name in collection.body.request.inputs">
@@ -318,8 +319,8 @@
                 </div>
 
                 <div class="la-query col-12 col-lg-6">
-                    <h1 class="la-title">Queries</h1>
-                    <table v-if="collection.body.queries.length > 0" class="col-12 table table-bordered text-green">
+                    <h1 class="la-title text-green">Queries</h1>
+                    <table v-if="collection.body.queries.length > 0" class="col-12 table table-bordered text-white">
                         <thead>
                             <tr>
                                 <th>sql</th>
@@ -338,7 +339,7 @@
                     </div>
                 </div>
                 <div class="la-request-debug   col-12 col-lg-6">
-                    <h1>Messages</h1>
+                    <h1 class="la-title text-green">Messages</h1>
                     <ul class="p-0 m-0 list" v-if="collection.body.messages">
                         <li v-for="message in collection.body.messages" class="list-item">
                             <p>{{message.body}}</p>
