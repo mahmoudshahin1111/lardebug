@@ -37,7 +37,8 @@ open http://localhost:3000
 ```bash
 php artisan vendor:publish --provider="LarDebug\ServiceProvider"
 ```
-In "lardebug.php" file you can customize server configurations
+
+And adjust config file (`config/lardebug.php`) with your desired settings.
 ```php
 return [
     'server' => [
@@ -57,7 +58,6 @@ also it works fine with laravel apis
 ```
 
 
-And adjust config file (`config/lardebug.php`) with your desired settings.
 
 ## License
 
