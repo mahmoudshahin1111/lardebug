@@ -3,7 +3,7 @@ name: Test Install
 on:
   push:
     branches:
-      - master
+      - "*"
   pull_request:
     branches:
       - "*"
@@ -23,7 +23,6 @@ jobs:
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
-          composer update --${{ matrix.dependency-version }} --prefer-dist --no-progress
     
       - name: Install LarDebug
         run: |
