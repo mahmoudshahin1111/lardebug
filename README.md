@@ -32,7 +32,7 @@ in file `config\app.php` add this line to providers
 php artisan lardebug:serve
 ```
 ### In Browser
-open http://localhost:3000
+open http://localhost:4560
 ## Customize
 ```bash
 php artisan vendor:publish --provider="LarDebug\ServiceProvider"
@@ -43,7 +43,7 @@ And adjust config file (`config/lardebug.php`) with your desired settings.
 return [
     'server' => [
         'host' => 'localhost',
-        'port' => 3000, // Change to any port as you want 👍
+        'port' => 4560, // Change to any port as you want 👍
     ],
 ];
 ```
