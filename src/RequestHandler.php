@@ -4,7 +4,7 @@ namespace LarDebug;
 
 use Illuminate\Http\Request;
 use LarDebug\Server;
-
+use LarDebug\ServerPayload;
 class RequestHandler
 {
     private $server;
@@ -31,19 +31,20 @@ class RequestHandler
      */
     public function handleRequest($request)
     {
-        $this->server->sendStartSignal();
+        $this->server->sendPayload(new ServerPayload('start',[]));
         return $request;
     }
     public function handleResponse($response)
     {
-        $this->server->sendPayload('collect', [
+        $payload = new ServerPayload('collect',[
             'route' => $this->collectors['route']->collect(),
             'request' => $this->collectors['request']->collect(),
             'queries' => $this->collectors['query']->collect(),
             'messages' => $this->collectors['message']->collect(),
             'exceptions' => $this->collectors['exceptions']->collect(),
         ]);
-        $this->server->sendEndSignal();
+        $this->server->sendPayload($payload);
+        $this->server->sendPayload(new ServerPayload('end',[]));
         return $response;
     }
     public function addCollector($key, $collector)

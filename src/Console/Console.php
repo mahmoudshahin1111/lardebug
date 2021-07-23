@@ -3,6 +3,7 @@
 namespace LarDebug\Console;
 
 use LarDebug\Server;
+use LarDebug\ServerPayload;
 use LarDebug\Console\Message;
 
 
@@ -19,6 +20,7 @@ class Console{
      * @return void
      */
     public function send(Message $consoleMessage){
-        $this->server->sendPayload('console',$consoleMessage->get());
+        $payload = new ServerPayload('console',$consoleMessage->get());
+        $this->server->sendPayload($payload);
     }
 }

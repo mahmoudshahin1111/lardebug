@@ -182,7 +182,7 @@
                         <button v-if="isConsoleMessageHasException(logMessage)" class="btn text-white border border-danger" type="button"
                             data-bs-toggle="collapse" v-bind:data-bs-target="'#messageCollapse_'+index"
                             aria-expanded="false" v-bind:aria-controls="'messageCollapse_'+index">
-                            {{index}} # {{toData(logMessage.time)}} - {{logMessage.body}}
+                            {{index}} # {{toDate(logMessage.time)}} - {{logMessage.body}}
                         </button>
                         <div  v-if="isConsoleMessageHasException(logMessage)" class="collapse" v-bind:id="'messageCollapse_'+index">
                             <div class="card card-body">
@@ -197,7 +197,7 @@
                             </div>
                         </div>
 
-                        <p v-if="!isConsoleMessageHasException(logMessage)">{{index}} # {{toData(logMessage.time)}} -
+                        <p v-if="!isConsoleMessageHasException(logMessage)">{{index}} # {{toDate(logMessage.time)}} -
                             {{logMessage.body}}</p>
                       
                     </li>
@@ -212,7 +212,7 @@
                         placeholder="choose request">
                         <option selected disabled>choose request</option>
                         <option v-for="_collection,index in collections" v-bind:value="_collection">#{{index}}
-                            {{_collection.request.id}} {{_collection.request.ajax === true?'ajax':''}}</option>
+                            {{_collection.body.request.id}} {{_collection.body.request.ajax === true?'ajax':''}}</option>
                     </select>
                 </fieldset>
                 <fieldset class="d-flex flex-row justify-content-center align-items-center gap-1">
@@ -230,9 +230,9 @@
                     <div class="la-title-container">
                         <h1 class="la-title">Exception</h1>
                         <button type="button" class="la-showExceptionBtn"
-                            v-on:click="openExceptionInNewTab(collection.exceptions[0])">Screen</button>
+                            v-on:click="openExceptionInNewTab(collection.body.exceptions[0])">Screen</button>
                     </div>
-                    <div v-for="exception in collection.exceptions">
+                    <div v-for="exception in collection.body.exceptions">
                         <div class="la-exception">
                             <div class="la-exceptionClass">Exception Class : {{exception.exceptionClass}}</div>
                             <div class="la-file"><span>File:</span>{{exception.file}}</div>
@@ -259,25 +259,25 @@
                         <tbody>
                             <tr>
                                 <th scope="row">
-                                    {{collection.route?.prefix}}
+                                    {{collection.body.route?.prefix}}
                                 </th>
                                 <td>
-                                    {{collection.route?.uri}}
+                                    {{collection.body.route?.uri}}
                                 </td>
                                 <td>
-                                    {{collection.route?.name}}
+                                    {{collection.body.route?.name}}
                                 </td>
                                 <td>
-                                    {{collection.route?.method}}
+                                    {{collection.body.route?.method}}
                                 </td>
                                 <td>
-                                    {{collection.route?.controller}}
+                                    {{collection.body.route?.controller}}
                                 </td>
                                 <td>
-                                    {{collection.route?.controllerMethod}}
+                                    {{collection.body.route?.controllerMethod}}
                                 </td>
                                 <td>
-                                    {{collection.route?.middleware}}
+                                    {{collection.body.route?.middleware}}
                                 </td>
 
                             </tr>
@@ -287,38 +287,38 @@
                 </div>
                 <div class="la-request col-12 col-lg-6">
                     <h1 class="la-title">Request</h1>
-                    <p v-if="collection.request.inputs">
+                    <p v-if="collection.body.request.inputs">
                         <strong>inputs:</strong>
-                    <ul v-for="value,name in collection.request.inputs">
+                    <ul v-for="value,name in collection.body.request.inputs">
                         <li>
                             <p> <strong>{{name}}:</strong>{{value}}</p>
                         </li>
                     </ul>
                     </p>
-                    <p><strong>Method:</strong>{{collection.request.method}}</p>
-                    <p><strong>Url:</strong>{{collection.request.url}}</p>
-                    <p v-if="collection.request.middleware">
+                    <p><strong>Method:</strong>{{collection.body.request.method}}</p>
+                    <p><strong>Url:</strong>{{collection.body.request.url}}</p>
+                    <p v-if="collection.body.request.middleware">
                         <strong>middleware:</strong>
-                    <ul v-for="middleware in collection.request.middleware">
+                    <ul v-for="middleware in collection.body.request.middleware">
                         <li>
                             <p>{{middleware}}</p>
                         </li>
                     </ul>
                     </p>
-                    <p v-if="collection.request.files">
+                    <p v-if="collection.body.request.files">
                         <strong>Files:</strong>
-                    <ul v-for="file in collection.request.files">
+                    <ul v-for="file in collection.body.request.files">
                         <li>
                             <p v-for="value,name in file"><strong>{{name}}:</strong>{{value}}</p>
                         </li>
                     </ul>
                     </p>
-                    <p><strong>authenticated:</strong>{{collection.request.auth?'yes':'no'}}</p>
+                    <p><strong>authenticated:</strong>{{collection.body.request.auth?'yes':'no'}}</p>
                 </div>
 
                 <div class="la-query col-12 col-lg-6">
                     <h1 class="la-title">Queries</h1>
-                    <table v-if="collection.queries.length > 0" class="col-12 table table-bordered text-green">
+                    <table v-if="collection.body.queries.length > 0" class="col-12 table table-bordered text-green">
                         <thead>
                             <tr>
                                 <th>sql</th>
@@ -326,24 +326,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="query in collection.queries">
+                            <tr v-for="query in collection.body.queries">
                                 <td>{{query.sql}}</td>
                                 <td>{{query.time}}</td>
                             </tr>
                         </tbody>
                     </table>
-                    <div v-if="collection.queries.length <= 0">
+                    <div v-if="collection.body.queries.length <= 0">
                         <p>No Queries In The Request</p>
                     </div>
                 </div>
                 <div class="la-request-debug   col-12 col-lg-6">
                     <h1>Messages</h1>
-                    <ul class="p-0 m-0 list" v-if="collection.messages">
-                        <li v-for="message in collection.messages" class="list-item">
+                    <ul class="p-0 m-0 list" v-if="collection.body.messages">
+                        <li v-for="message in collection.body.messages" class="list-item">
                             <p>{{message.body}}</p>
                         </li>
                     </ul>
-                    <p v-if="!collection.messages">No Messages</p>
+                    <p v-if="!collection.body.messages">No Messages</p>
                 </div>
 
             </div>
@@ -378,7 +378,7 @@
                     selectLastRequestEnabled: true,
                 },
                 methods: {
-                    toData: function (milliseconds) {
+                    toDate: function (milliseconds) {
                         return (new Date(milliseconds)).toLocaleString();
                     },
                     openExceptionInNewTab(exception) {

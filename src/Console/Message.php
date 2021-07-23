@@ -9,15 +9,15 @@ class Message{
     private $time;
     private $body;
     private $meta;
-    private $type;
-    public function __construct($body,$meta=null,$type=null){
+    private $prefix;
+    public function __construct($body,$meta=null,$prefix=null){
         $this->body = $body;
         $this->meta = $meta;
-        $this->type = $type;
+        $this->prefix = isset($prefix)?'message':'';
     }
     public function get(){
         return [
-            'id' => \uniqid('message_'),
+            'id' => \uniqid($this->prefix."_"),
             'time' => \microtime(true) * 1000,
             'body' => $this->body,
             'meta'=>$this->meta,
