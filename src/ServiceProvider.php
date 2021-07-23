@@ -96,7 +96,7 @@ class ServiceProvider extends Provider
     public function boot()
     {
         if (app()->runningInConsole()) {
-            // dd(1);
+            // Handle Something when run command in console
         }
         $larDebug = $this->app->make(LarDebug::class);
 
