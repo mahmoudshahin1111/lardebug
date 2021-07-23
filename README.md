@@ -1,6 +1,6 @@
 # LarDebug
 
-[![](http://poser.pugx.org/lardebug/lardebug/v)](https://github.com/mahmoudshahin1111/lardebug/releases/tag/1.0.0)
+[![](http://poser.pugx.org/lardebug/lardebug/v)](https://github.com/mahmoudshahin1111/lardebug/releases/tag/1.1.0)
 [![License](http://poser.pugx.org/lardebug/lardebug/license)](https://packagist.org/packages/lardebug/lardebug)
 <!-- [![Total Downloads](http://poser.pugx.org/lardebug/lardebug/downloads)](https://packagist.org/packages/lardebug/lardebug) -->
 <!-- [![Latest Unstable Version](http://poser.pugx.org/lardebug/lardebug/v/unstable)](https://packagist.org/packages/lardebug/lardebug)  -->
@@ -36,6 +36,15 @@ open http://localhost:3000
 ## Customize
 ```bash
 php artisan vendor:publish --provider="LarDebug\ServiceProvider"
+```
+In "lardebug.php" file you can customize server configurations
+```php
+return [
+    'server' => [
+        'host' => 'localhost',
+        'port' => 3000, // Change to any port as you want 👍
+    ],
+];
 ```
 ### Send message to server immediately with Facade
 ```php
