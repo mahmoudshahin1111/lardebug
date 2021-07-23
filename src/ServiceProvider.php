@@ -45,6 +45,9 @@ class ServiceProvider extends Provider
      */
     public function register()
     {
+        if(!\config('app.debug')){
+            return;
+        }
         $this->app->alias('LarDebug',\LarDebug\Facade\LarDebug::class);
         $this->app->make(\Illuminate\Contracts\Http\Kernel::class)->pushMiddleware(LarDebugMiddleware::class);
         $this->app->singleton(RouteCollector::class, function () {
@@ -97,6 +100,9 @@ class ServiceProvider extends Provider
      */
     public function boot()
     {
+        if(!\config('app.debug')){
+            return;
+        }
         if (app()->runningInConsole()) {
             // Handle Something when run command in console
         }
