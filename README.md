@@ -50,7 +50,7 @@ return [
 ```php
     LarDebug::log("message");
 ```
-also he works fine with laravel apis
+also it works fine with laravel apis
 ### add messages to request
 ```php
     Log::debug("message");
