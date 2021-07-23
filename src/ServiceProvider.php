@@ -45,6 +45,7 @@ class ServiceProvider extends Provider
      */
     public function register()
     {
+        $this->app->alias('LarDebug',\LarDebug\Facade\LarDebug::class);
         $this->app->make(\Illuminate\Contracts\Http\Kernel::class)->pushMiddleware(LarDebugMiddleware::class);
         $this->app->singleton(RouteCollector::class, function () {
             return new RouteCollector($this->app->make(Router::class));
@@ -64,6 +65,7 @@ class ServiceProvider extends Provider
         $this->app->singleton(QueryFormatter::class, function () {
             return new QueryFormatter();
         });
+        
         $this->app->singleton(LarDebug::class, function ($app) {
             return new LarDebug($app);
         });
