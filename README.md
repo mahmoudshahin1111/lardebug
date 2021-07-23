@@ -37,6 +37,16 @@ open http://localhost:3000
 ```bash
 php artisan vendor:publish --provider="LarDebug\ServiceProvider"
 ```
+### Send message to server immediately with Facade
+```php
+    LarDebug::log("message");
+```
+also he works fine with laravel apis
+### add messages to request
+```php
+    Log::debug("message");
+```
+
 
 And adjust config file (`config/lardebug.php`) with your desired settings.
 
