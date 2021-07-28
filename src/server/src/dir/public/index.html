@@ -231,7 +231,7 @@
                 <div class="la-exceptions col-12">
                     <div class="la-title-container">
                         <h1 class="la-title">Exception</h1>
-                        <button type="button" class="la-showExceptionBtn"
+                        <button v-bind:disabled="!collection.body.exceptions || collection.body.exceptions.length <= 0  " type="button" class="la-showExceptionBtn"
                             v-on:click="openExceptionInNewTab(collection.body.exceptions[0])">Screen</button>
                     </div>
                     <div v-for="exception in collection.body.exceptions">
