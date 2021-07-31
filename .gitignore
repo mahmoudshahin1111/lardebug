@@ -1,1 +1,2 @@
-server/.vscode
+./server/.vscode
+./server/node_modules
