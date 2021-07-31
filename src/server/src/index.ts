@@ -1,64 +1,61 @@
-import * as express from "express";
-import * as cors from "cors";
-import * as http from "http";
-import * as socketIo from "socket.io";
-import * as path from "path";
+import * as express from 'express';
+import * as cors from 'cors';
+import * as http from 'http';
+import * as socketIo from 'socket.io';
+import * as path from 'path';
 
 const app = express.default();
 const server = http.createServer(app);
 const io = new socketIo.Server(server);
 
-
-app.use(express.json({limit:'500mb'}));
+app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.json({ limit: '500mb' }));
 app.use(cors.default({ origin: true }));
-app.use(express.static("public"));
-app.get("*", function (req: express.Request, res: express.Response) {
-  return res.sendFile(path.join(__dirname, "/public/index.html"));
-});
+
+// app.get("/", function (req: express.Request, res: express.Response) {
+//   return res.sendFile(path.join(__dirname, "/public/index.html"));
+// });
 app.post(
-  "/lardebug/start",
+  '/lardebug/start',
   function (req: express.Request, res: express.Response) {
-    io.emit("start", null);
+    io.emit('start', null);
     res.status(200).send();
   }
 );
 app.post(
-  "/lardebug/collect",
+  '/lardebug/collect',
   function (req: express.Request, res: express.Response) {
-    io.emit("collect", req.body);
+    io.emit('collect', req.body);
     res.status(200).send();
   }
 );
 app.post(
-  "/lardebug/console",
+  '/lardebug/console',
   function (req: express.Request, res: express.Response) {
-    io.emit("console", req.body);
+    io.emit('console', req.body);
     res.status(200).send();
   }
 );
 app.post(
-  "/lardebug/end",
+  '/lardebug/end',
   function (req: express.Request, res: express.Response) {
-    io.emit("end", null);
+    io.emit('end', null);
     res.status(200).send();
   }
 );
-io.on("connection", function (socket) {
+io.on('connection', function (socket) {
   console.log(`client listening io ${socket.id}`);
 });
 
-
 interface IConfig {
   server: {
-    host: string,
+    host: string;
     port: number;
-  }
+  };
 }
 class ServerConfigManager {
   private config: IConfig | null = null;
-  constructor() {
-
-  }
+  constructor() {}
 
   boot() {
     this.loadConfig();
@@ -77,12 +74,12 @@ class ServerConfigManager {
   }
 }
 
-
-
 const serverConfigManager = new ServerConfigManager();
 serverConfigManager.boot();
 
-
 server.listen(serverConfigManager.getPort(), function () {
-  console.log(`debug server on ${serverConfigManager.getHost()}:${serverConfigManager.getPort()}`);
+  console.log(
+    `debug server on ${serverConfigManager.getHost()}:${serverConfigManager.getPort()}`
+  );
+  console.log(__dirname);
 });

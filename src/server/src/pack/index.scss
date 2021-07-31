@@ -1,0 +1,159 @@
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@200&display=swap");
+
+html,
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+
+
+
+.la-app {
+    background-color: black;
+    border: 1px solid white;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: 1fr;
+    /* grid-template-rows: 50vh 50vh; */
+    gap: 1px;
+    width: 100vw;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    gap: 0.25rem;
+    padding: calc(1.5rem + 10px);
+}
+
+.la-collection-select {
+    max-width: 100vw;
+    width: 400px;
+    height: 30px;
+    color: black;
+    font-size: 1.2em;
+    font-weight: bolder;
+}
+
+.la-routes {
+    border: 1px solid white;
+    padding: 0.25rem;
+    height: 200px;
+    overflow-y: auto;
+}
+
+.la-routes .la-title {
+    position: sticky;
+    top: 0;
+    background-color: black;
+}
+
+.la-request {
+    border: 1px solid white;
+    padding: 0.25rem;
+    overflow-y: auto;
+    height: 200px;
+}
+
+.la-request .la-title {
+    position: sticky;
+    top: 0;
+    background-color: black;
+}
+
+.la-query {
+    border: 1px solid white;
+    padding: 0.25rem;
+    overflow-y: auto;
+    height: 200px;
+    color: white;
+}
+
+.la-query .la-title {
+    position: sticky;
+    top: 0;
+    background-color: black;
+}
+
+.la-request-debug {
+    border: 1px solid white;
+    color: white;
+    height: 200px;
+    overflow-y: auto;
+    height: 200px;
+}
+
+.la-request .la-title {
+    position: sticky;
+    top: 0;
+    background-color: black;
+}
+
+.la-console-log {
+    border: 1px solid white;
+    color: white;
+    height: 200px;
+    overflow-y: auto;
+}
+
+.la-console-log .la-title {
+    position: sticky;
+    top: 0;
+    background-color: black;
+}
+
+.la-events {
+    border: 1px solid white;
+    color: white;
+    height: 200px;
+    overflow-y: auto;
+
+}
+
+.la-events .la-title {
+    position: sticky;
+    top: 0;
+    background-color: black;
+}
+
+.la-exceptions {
+    border: 1px solid white;
+
+    height: 200px;
+    overflow-y: auto;
+}
+
+.la-exceptions .la-title-container {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    background-color: black;
+    align-items: center;
+    gap: 10px;
+}
+
+.la-exceptions .la-title-container .la-title {
+    color: rgb(218, 35, 35);
+}
+
+.la-exceptions .la-title-container .la-showExceptionBtn {
+    color: black;
+    font-weight: bolder;
+    font-size: 1.2em;
+    height: 80%;
+}
+
+.la-exceptions .la-exception {
+    color: white;
+    line-height: 2em;
+}
+
+.text-green {
+    color: rgb(35, 218, 65);
+}
