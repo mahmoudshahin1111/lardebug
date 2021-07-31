@@ -30,9 +30,9 @@ var io = new socketIo.Server(server);
 app.use(express.json({ limit: '500mb' }));
 app.use(cors.default({ origin: true }));
 app.use(express.static("public"));
-app.get("*", function (req, res) {
-    return res.sendFile(path.join(__dirname, "/public/index.html"));
-});
+// app.get("/", function (req: express.Request, res: express.Response) {
+//   return res.sendFile(path.join(__dirname, "/public/index.html"));
+// });
 app.post("/lardebug/start", function (req, res) {
     io.emit("start", null);
     res.status(200).send();
