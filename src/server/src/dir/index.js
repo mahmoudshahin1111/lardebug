@@ -27,9 +27,9 @@ var path = __importStar(require("path"));
 var app = express.default();
 var server = http.createServer(app);
 var io = new socketIo.Server(server);
+app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.json({ limit: '500mb' }));
 app.use(cors.default({ origin: true }));
-app.use(express.static("public"));
 // app.get("/", function (req: express.Request, res: express.Response) {
 //   return res.sendFile(path.join(__dirname, "/public/index.html"));
 // });
@@ -79,4 +79,5 @@ var serverConfigManager = new ServerConfigManager();
 serverConfigManager.boot();
 server.listen(serverConfigManager.getPort(), function () {
     console.log("debug server on " + serverConfigManager.getHost() + ":" + serverConfigManager.getPort());
+    console.log(__dirname);
 });
