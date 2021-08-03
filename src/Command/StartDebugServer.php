@@ -57,7 +57,7 @@ class StartDebugServer extends Command
         return "node " . $this->getServerExecFilePath() . ' ' . $this->getCommandArgs();
     }
     private function getServerExecFilePath(){
-        return $this->dirPath.'/server/src/dir/index.js'; 
+        return $this->dirPath.'/../server/src/dir/index.js'; 
     }
     private function printServerStartedMessage()
     {

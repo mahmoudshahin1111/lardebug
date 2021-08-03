@@ -70,7 +70,7 @@ class ServerConfigManager {
     this.config = require(this.getConfigFilePath());
   }
   private getConfigFilePath() {
-    return path.join(__dirname, '/../../../../config/lardebug.json');
+    return path.join(__dirname, '/../../../config/lardebug.json');
   }
 }
 
