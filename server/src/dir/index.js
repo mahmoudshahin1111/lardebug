@@ -33,23 +33,23 @@ app.use(cors.default({ origin: true }));
 // app.get("/", function (req: express.Request, res: express.Response) {
 //   return res.sendFile(path.join(__dirname, "/public/index.html"));
 // });
-app.post("/lardebug/start", function (req, res) {
-    io.emit("start", null);
+app.post('/lardebug/start', function (req, res) {
+    io.emit('start', null);
     res.status(200).send();
 });
-app.post("/lardebug/collect", function (req, res) {
-    io.emit("collect", req.body);
+app.post('/lardebug/collect', function (req, res) {
+    io.emit('collect', req.body);
     res.status(200).send();
 });
-app.post("/lardebug/console", function (req, res) {
-    io.emit("console", req.body);
+app.post('/lardebug/console', function (req, res) {
+    io.emit('console', req.body);
     res.status(200).send();
 });
-app.post("/lardebug/end", function (req, res) {
-    io.emit("end", null);
+app.post('/lardebug/end', function (req, res) {
+    io.emit('end', null);
     res.status(200).send();
 });
-io.on("connection", function (socket) {
+io.on('connection', function (socket) {
     console.log("client listening io " + socket.id);
 });
 var ServerConfigManager = /** @class */ (function () {
@@ -71,7 +71,7 @@ var ServerConfigManager = /** @class */ (function () {
         this.config = require(this.getConfigFilePath());
     };
     ServerConfigManager.prototype.getConfigFilePath = function () {
-        return path.join(__dirname, '/../../../../config/lardebug.json');
+        return path.join(__dirname, '/../../../config/lardebug.json');
     };
     return ServerConfigManager;
 }());
