@@ -1,32 +1,41 @@
 {
-    "name": "lardebug/lardebug",
-    "type": "library",
-    "description": "",
-    "keywords": ["lardebug", "laravel debugger"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Mahmoud Shahin",
-            "email": "mahmoudshahin1111@gmail.com"
-
-        }
-    ],
-    "require": {
-        "php": "^7.2|^8.0",
-        "guzzlehttp/guzzle": "^7.0.1",
-        "mockery/mockery": "^1.4.2",
-        "nunomaduro/collision": "^5.0",
-        "phpunit/phpunit": "^9.3.3"
-    },
-    "require-dev": {
-        "maximebf/debugbar": "1.*"
-    },
-    "autoload": {
-        "psr-4": {
-            "LarDebug\\": "src/"
-        }
-    },
-    "scripts": {
-     
+  "name": "lardebug/lardebug",
+  "type": "library",
+  "description": "",
+  "keywords": [
+    "lardebug",
+    "laravel debugger",
+    "laravel",
+    "tools"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mahmoud Shahin",
+      "email": "mahmoudshahin1111@gmail.com"
     }
+  ],
+  "require": {
+    "php": "^7.2|^8.0",
+    "guzzlehttp/guzzle": "^7.0.1",
+    "mockery/mockery": "^1.4.2",
+    "nunomaduro/collision": "^5.0",
+    "phpunit/phpunit": "^9.3.3"
+  },
+  "require-dev": {
+    "maximebf/debugbar": "1.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "LarDebug\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "LarDebug\\ServiceProvider"
+      ]
+    }
+  },
+  "scripts": {}
 }
