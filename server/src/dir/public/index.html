@@ -206,6 +206,7 @@
     <!-- JavaScript Bundle with Popper -->
     <script type="text/javascript" src="bundle.js"></script>
     <script>
+        
         const socket = io();
         var app = new Vue({
 
@@ -218,6 +219,9 @@
                 selectLastRequestEnabled: true,
             },
             methods: {
+                printLogCopyrights(){
+                    console.log("%cThanks For Use LarDebug \n for report about any bugs https://github.com/mahmoudshahin1111/lardebug/issues","color:red;font-size:18px");
+                },
                 toDate: function (milliseconds) {
                     return (new Date(milliseconds)).toLocaleString();
                 },
@@ -236,6 +240,7 @@
                 }
             },
             mounted: function () {
+                this.printLogCopyrights();
                 socket.on('start', () => {
                     this.running = true;
                 });
