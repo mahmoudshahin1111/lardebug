@@ -13,9 +13,8 @@ You can install the package through Composer.
 ```bash
 composer require lardebug/lardebug
 ```
-
-Then publish the config and migration file of the package using artisan.
-
+### Laravel without auto-discovery:
+#### If you don't use auto-discovery, add the ServiceProvider to the providers array in config/app.php
 in file `config\app.php` add this line to providers
 
 ```php
@@ -25,6 +24,7 @@ in file `config\app.php` add this line to providers
      /* */
  ]
 ```
+
 
 ## Usage
 
