@@ -16,14 +16,14 @@
     }
   ],
   "require": {
-    "php": "^7.2|^8.0",
-    "guzzlehttp/guzzle": "^7.0.1",
-    "mockery/mockery": "^1.4.2",
-    "nunomaduro/collision": "^5.0",
-    "phpunit/phpunit": "^9.3.3"
+    "php": ">=7.2",
+    "guzzlehttp/guzzle": "^6.3.1|^7.0.1"
   },
   "require-dev": {
-    "maximebf/debugbar": "1.*"
+    "maximebf/debugbar": "1.*",
+    "phpunit/phpunit": "^8.5.8|^9.3.3",
+    "mockery/mockery": "^1.4.2",
+    "nunomaduro/collision": "^5.0"
   },
   "autoload": {
     "psr-4": {
