@@ -48,6 +48,7 @@ And adjust config file (`config/lardebug.php`) with your desired settings.
 
 ```php
 return [
+    'enabled' => true // if you want to disable lardebug set to false 😭
     'server' => [
         'host' => 'localhost',
         'port' => 4560, // Change to any port as you want 👍
