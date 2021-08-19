@@ -1,1 +1,1 @@
-{"server":{"host":"localhost","port":4560}}
+{ "server": { "host": "localhost", "port": 4560 },"enabled":true }
