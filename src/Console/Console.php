@@ -20,7 +20,13 @@ class Console{
      * @return void
      */
     public function send(Message $consoleMessage){
+        if ($this->isLarDebugDisabled()) {
+            return;
+        }
         $payload = new ServerPayload('console',$consoleMessage->get());
         $this->server->sendPayload($payload);
+    }
+    private function isLarDebugDisabled(){
+        return !\config('app.debug') || !\config('lardebug.enabled');
     }
 }
