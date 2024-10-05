@@ -1,10 +1,9 @@
 # LarDebug
 
 [![](http://poser.pugx.org/lardebug/lardebug/v)](https://github.com/mahmoudshahin1111/lardebug/releases/tag/1.1.1)
-[![License](http://poser.pugx.org/lardebug/lardebug/license)](https://packagist.org/packages/lardebug/lardebug)
+[![](http://poser.pugx.org/lardebug/lardebug/license)](https://packagist.org/packages/lardebug/lardebug)
 
-<!-- [![Total Downloads](http://poser.pugx.org/lardebug/lardebug/downloads)](https://packagist.org/packages/lardebug/lardebug) -->
-<!-- [![Latest Unstable Version](http://poser.pugx.org/lardebug/lardebug/v/unstable)](https://packagist.org/packages/lardebug/lardebug)  -->
+![image](https://github.com/user-attachments/assets/eb5bb358-14c9-41a0-8e93-9ea61bd9d2a6)
 
 ## Installation
 
